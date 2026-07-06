@@ -1,0 +1,48 @@
+{
+  "description": "宝宝老婆博士求职助手的详细岗位数据结构示例。真实抓取时，每个岗位都尽量填满结构化字段，同时保存 raw_text 原文。",
+  "jobs": [
+    {
+      "id": "cn-univ-001",
+      "source": "高校人才招聘公告",
+      "source_url": "https://example.edu.cn/job/001",
+      "school_or_company": "南京大学",
+      "college_or_department": "人工智能学院 / 计算机学院",
+      "job_title": "青年教师 / 特聘研究员",
+      "job_type": "中国高校",
+      "location": "南京",
+      "publish_date": "2026-07-06",
+      "deadline": "2026-07-09",
+      "requirements": {
+        "degree": "博士",
+        "major": "人工智能、计算机、电子信息、数据科学等相关方向",
+        "research_keywords": ["机器学习", "大模型", "数据挖掘", "智能系统"],
+        "paper_requirement": "近五年有高水平论文、科研项目或代表性成果",
+        "teaching_requirement": "能够承担本科生或研究生课程",
+        "overseas_background": "海外学习或科研经历者优先",
+        "language": "中文为主，可附英文材料"
+      },
+      "benefits": {
+        "salary": "按学校人才层次和学院政策面议",
+        "settling_allowance": "可申请安家费和地方人才补贴",
+        "startup_funding": "可申请科研启动经费",
+        "housing": "协助申请人才公寓",
+        "career_support": "支持博士后或青年人才项目"
+      },
+      "application_materials": [
+        "中文简历",
+        "英文 CV",
+        "代表性论文 3-5 篇",
+        "研究计划",
+        "教学计划",
+        "学历学位证明"
+      ],
+      "contact": {
+        "name": "学院人事秘书",
+        "email": "hr-college@example.edu.cn",
+        "phone": "025-00000000"
+      },
+      "application_method": "将申请材料发送至学院联系人邮箱，邮件标题建议写：姓名+博士毕业学校+应聘岗位。",
+      "raw_text": "这里保存招聘公告原文全文。真实抓取时不只保存摘要，而是尽量保存完整正文，避免解析漏掉条件、待遇或联系方式。"
+    }
+  ]
+}

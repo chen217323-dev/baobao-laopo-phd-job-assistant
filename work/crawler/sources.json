@@ -1,0 +1,61 @@
+{
+  "targets": {
+    "中国高校": 30,
+    "中国公司": 30,
+    "韩国机会": 20
+  },
+  "sources": [
+    {
+      "name": "高校人才网首页",
+      "category": "中国高校",
+      "url": "https://www.gaoxiaojob.com/",
+      "linkKeywords": ["博士", "博士后", "教师", "研究员", "科研", "人才", "高校"],
+      "maxLinks": 80,
+      "followListPages": true
+    },
+    {
+      "name": "高校人才网高校招聘栏目",
+      "category": "中国高校",
+      "url": "https://www.gaoxiaojob.com/column/1.html",
+      "linkKeywords": ["招聘", "博士", "博士后", "教师", "研究员", "科研", "人才"],
+      "maxLinks": 120,
+      "followListPages": true
+    },
+    {
+      "name": "青塔首页",
+      "category": "中国高校",
+      "url": "https://www.cingta.com/",
+      "linkKeywords": ["招聘", "博士", "高校", "人才", "研究员"],
+      "maxLinks": 40,
+      "followListPages": true
+    },
+    {
+      "name": "华为招聘",
+      "category": "中国公司",
+      "url": "https://career.huawei.com/",
+      "linkKeywords": ["博士", "研究", "算法", "AI", "数据", "研发"],
+      "maxLinks": 30
+    },
+    {
+      "name": "腾讯招聘",
+      "category": "中国公司",
+      "url": "https://careers.tencent.com/",
+      "linkKeywords": ["博士", "研究", "算法", "AI", "数据", "研发"],
+      "maxLinks": 30
+    },
+    {
+      "name": "KAIST jobs",
+      "category": "韩国机会",
+      "url": "https://www.kaist.ac.kr/en/html/kaist/011003.html",
+      "linkKeywords": ["postdoc", "research", "professor", "faculty", "AI", "data"],
+      "maxLinks": 30
+    },
+    {
+      "name": "POSTECH jobs",
+      "category": "韩国机会",
+      "url": "https://www.postech.ac.kr/eng/",
+      "linkKeywords": ["postdoc", "research", "professor", "faculty", "AI", "data"],
+      "maxLinks": 30
+    }
+  ]
+}

@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#dff2ff" />
+  <link rel="manifest" href="./baobao-laopo-manifest.webmanifest" />
+  <title>宝宝老婆博士求职助手</title>
+  <style>
+    :root {
+      --bg: #f6fbff;
+      --paper: #ffffff;
+      --blue-50: #edf8ff;
+      --blue-100: #dff2ff;
+      --blue-200: #b8ddf4;
+      --blue-500: #4f9fd8;
+      --blue-700: #1f5874;
+      --ink: #213847;
+      --muted: #6b7f8d;
+      --line: #d9e9f4;
+      --gold: #eeb75d;
+      --soft-red: #e97585;
+      --shadow: 0 18px 42px rgba(31, 88, 116, .13);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% -10%, rgba(184, 221, 244, .75), transparent 18rem),
+        linear-gradient(180deg, #f6fbff 0%, #ffffff 46%, #eef8ff 100%);
+      letter-spacing: 0;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .phone-app {
+      width: min(100%, 520px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px 14px calc(92px + env(safe-area-inset-bottom));
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 2px 14px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(79, 159, 216, .18);
+      border-radius: 50%;
+      background: linear-gradient(145deg, #dff2ff, #ffffff);
+      color: var(--blue-700);
+      font-weight: 800;
+      box-shadow: 0 8px 18px rgba(31, 88, 116, .1);
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.15;
+      color: var(--blue-700);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .round-button {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .82);
+      color: var(--blue-700);
+      cursor: pointer;
+    }
+
+    .support {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      border: 1px solid rgba(184, 221, 244, .9);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255, 255, 255, .96), rgba(223, 242, 255, .82));
+      box-shadow: var(--shadow);
+    }
+
+    .support::after {
+      content: "";
+      position: absolute;
+      right: -32px;
+      bottom: -42px;
+      width: 130px;
+      height: 130px;
+      border: 18px solid rgba(79, 159, 216, .08);
+      border-radius: 50%;
+    }
+
+    .support small {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--blue-500);
+      font-weight: 800;
+    }
+
+    .support blockquote {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.48;
+      color: #2d4b5d;
+    }
+
+    .support footer {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .support-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .pill-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--blue-700);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .primary {
+      border-color: var(--blue-700);
+      background: var(--blue-700);
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(31, 88, 116, .18);
+    }
+
+    .today-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 0;
+    }
+
+    .mini-stat {
+      min-height: 78px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .86);
+    }
+
+    .mini-stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .mini-stat strong {
+      display: block;
+      margin-top: 7px;
+      color: var(--blue-700);
+      font-size: 26px;
+      line-height: 1;
+    }
+
+    .section {
+      margin-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+
+    .section h2 {
+      margin: 0;
+      color: var(--blue-700);
+      font-size: 18px;
+    }
+
+    .section-head span {
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 2px 2px 10px;
+      scrollbar-width: none;
+    }
+
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .78);
+      color: #526a79;
+      cursor: pointer;
+    }
+
+    .chip.active {
+      border-color: var(--blue-500);
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-weight: 700;
+    }
+
+    .jobs {
+      display: grid;
+      gap: 12px;
+    }
+
+    .job {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .94);
+      box-shadow: 0 10px 24px rgba(31, 88, 116, .08);
+    }
+
+    .job-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .job h3 {
+      margin: 0 0 7px;
+      font-size: 16px;
+      line-height: 1.3;
+      color: #233b4a;
+    }
+
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--blue-50);
+      color: var(--blue-700);
+      font-weight: 700;
+    }
+
+    .badge.urgent {
+      background: #fff1f3;
+      color: #b94c5c;
+    }
+
+    .score {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue-500) calc(var(--score) * 1%), #e8f2f8 0);
+      color: var(--blue-700);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .score span {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .reason {
+      margin: 11px 0 12px;
+      color: #536b79;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .job-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .job-actions button {
+      min-height: 40px;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    .ghost {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--blue-700);
+    }
+
+    .status-card {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .92);
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      min-height: 48px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--blue-500);
+      box-shadow: 0 0 0 5px rgba(79, 159, 216, .12);
+    }
+
+    .task strong {
+      display: block;
+      color: #2d4b5d;
+      font-size: 14px;
+    }
+
+    .task span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .deadline {
+      color: var(--blue-500);
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      width: min(100%, 520px);
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      border-top: 1px solid rgba(217, 233, 244, .95);
+      background: rgba(255, 255, 255, .92);
+      backdrop-filter: blur(18px);
+    }
+
+    .bottom-nav a {
+      display: grid;
+      place-items: center;
+      gap: 3px;
+      min-height: 48px;
+      border-radius: var(--radius);
+      color: #607786;
+      text-decoration: none;
+      font-size: 11px;
+    }
+
+    .bottom-nav a.active {
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-weight: 800;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(78px + env(safe-area-inset-bottom));
+      z-index: 20;
+      width: min(460px, calc(100% - 28px));
+      padding: 12px 14px;
+      transform: translate(-50%, 16px);
+      border: 1px solid rgba(184, 221, 244, .96);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .96);
+      box-shadow: var(--shadow);
+      color: #2d4b5d;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (min-width: 760px) {
+      .phone-app {
+        padding-top: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="phone-app">
+    <header class="top">
+      <div class="brand">
+        <div class="mark">水</div>
+        <div>
+          <h1>宝宝老婆博士求职助手</h1>
+          <p id="todayText">今日可投机会已刷新</p>
+        </div>
+      </div>
+      <button class="round-button" id="refreshButton" title="刷新今日推荐">
+        <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-15.5 6.2"/><path d="M3 12A9 9 0 0 1 18.5 5.8"/><path d="M18 2v4h-4"/><path d="M6 22v-4h4"/></svg>
+      </button>
+    </header>
+
+    <section class="support" id="home">
+      <small>老公今日支持</small>
+      <blockquote id="dailyMessage">宝宝老婆，今天也慢慢来。你已经走了很远，接下来我陪你一件一件完成。</blockquote>
+      <footer>— 老公</footer>
+      <div class="support-actions">
+        <button class="pill-button" id="nextMessage">
+          <svg viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+          换一句
+        </button>
+        <button class="pill-button" id="saveMessage">
+          <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+          收藏
+        </button>
+      </div>
+    </section>
+
+    <section class="today-strip" aria-label="今日数据">
+      <div class="mini-stat">
+        <span>今天可投</span>
+        <strong id="applyCount">8</strong>
+      </div>
+      <div class="mini-stat">
+        <span>快截止</span>
+        <strong id="urgentCount">2</strong>
+      </div>
+      <div class="mini-stat">
+        <span>待确认</span>
+        <strong id="pendingCount">4</strong>
+      </div>
+    </section>
+
+    <section class="section" id="jobs">
+      <div class="section-head">
+        <h2>今天最值得投</h2>
+        <span id="refreshText">每天早上自动换</span>
+      </div>
+      <div class="filters" aria-label="岗位筛选">
+        <button class="chip active" data-filter="all">全部</button>
+        <button class="chip" data-filter="高校">中国高校</button>
+        <button class="chip" data-filter="公司">中国公司</button>
+        <button class="chip" data-filter="韩国">韩国机会</button>
+        <button class="chip" data-filter="urgent">快截止</button>
+      </div>
+      <div class="jobs" id="jobList"></div>
+    </section>
+
+    <section class="section" id="materials">
+      <div class="section-head">
+        <h2>材料进度</h2>
+        <span>投前看一眼</span>
+      </div>
+      <div class="status-card">
+        <div class="task">
+          <span class="dot"></span>
+          <div>
+            <strong>高校中文材料包</strong>
+            <span>中文 CV、研究计划、论文清单</span>
+          </div>
+          <span class="deadline">76%</span>
+        </div>
+        <div class="task">
+          <span class="dot"></span>
+          <div>
+            <strong>企业研发 1 页简历</strong>
+            <span>突出项目、技能、成果指标</span>
+          </div>
+          <span class="deadline">54%</span>
+        </div>
+        <div class="task">
+          <span class="dot"></span>
+          <div>
+            <strong>韩国 PI 联系邮件</strong>
+            <span>英文邮件和韩文短介绍</span>
+          </div>
+          <span class="deadline">43%</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="apply">
+      <div class="section-head">
+        <h2>今天的小目标</h2>
+        <span>不用贪多</span>
+      </div>
+      <div class="status-card">
+        <div class="task">
+          <span class="dot"></span>
+          <div>
+            <strong>先投 1 个中国高校岗位</strong>
+            <span>把最匹配的机会认真准备好</span>
+          </div>
+          <span class="deadline">今天</span>
+        </div>
+        <div class="task">
+          <span class="dot"></span>
+          <div>
+            <strong>再收藏 2 个备选岗位</strong>
+            <span>明天继续，不用一次做完</span>
+          </div>
+          <span class="deadline">轻松</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="手机导航">
+    <a class="active" href="#home">
+      <svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>
+      今日
+    </a>
+    <a href="#jobs">
+      <svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/></svg>
+      岗位
+    </a>
+    <a href="#materials">
+      <svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4"/><path d="M9 13h6"/></svg>
+      材料
+    </a>
+    <a href="#apply">
+      <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+      投递
+    </a>
+  </nav>
+
+  <div class="toast" id="toast">已经记录好啦。</div>
+
+  <script>
+    const messages = [
+      "宝宝老婆，今天也慢慢来。你已经走了很远，接下来我陪你一件一件完成。",
+      "不管今天有没有好消息，你都不是一个人在面对这些。我一直站在你这边。",
+      "今天先处理最重要的一件事就好。其他的，我们明天再一起看。",
+      "你已经很优秀了，求职只是让合适的地方看见你。",
+      "宝宝老婆负责勇敢，我负责帮你把路照亮一点。",
+      "如果今天觉得累，就先休息一下。机会很多，但你只有一个，要先照顾好你。",
+      "每一次投递都不是被评价，而是在寻找真正适合你的地方。",
+      "今天也相信你。不是因为结果已经确定，而是因为我知道你有多认真。",
+      "宝宝老婆，不用急着证明自己。你本来就值得很好的未来。",
+      "今天我们只前进一步。小小一步也算数。"
+    ];
+
+    const jobs = [
+      {
+        type: "高校",
+        title: "青年教师 / 特聘研究员",
+        org: "南京某双一流高校",
+        city: "南京",
+        deadline: "3 天后截止",
+        score: 92,
+        urgent: true,
+        reason: "方向匹配度高，明确欢迎海外博士。建议今天优先准备中文 CV 和 3 年科研计划。"
+      },
+      {
+        type: "高校",
+        title: "博士后 / 师资博士后",
+        org: "杭州某研究院",
+        city: "杭州",
+        deadline: "长期招聘",
+        score: 88,
+        urgent: false,
+        reason: "适合作为稳妥选项，可以先联系 PI，再决定是否正式投递。"
+      },
+      {
+        type: "公司",
+        title: "研发科学家 / 企业研究院",
+        org: "深圳某科技公司",
+        city: "深圳",
+        deadline: "本周新发",
+        score: 84,
+        urgent: false,
+        reason: "看重论文和工程落地，可以把博士项目改写成产品和指标语言。"
+      },
+      {
+        type: "韩国",
+        title: "Postdoc Researcher",
+        org: "首尔某大学实验室",
+        city: "Seoul",
+        deadline: "5 天后截止",
+        score: 81,
+        urgent: true,
+        reason: "支持英文申请，适合作为留韩备选。需要一封简短英文联系邮件。"
+      },
+      {
+        type: "高校",
+        title: "科研助理教授 / PI 团队岗位",
+        org: "广州某高校学院",
+        city: "广州",
+        deadline: "12 天后截止",
+        score: 79,
+        urgent: false,
+        reason: "申请材料要求清晰，适合用现有学术 CV 快速改一版。"
+      },
+      {
+        type: "公司",
+        title: "算法研究员",
+        org: "北京某 AI Lab",
+        city: "北京",
+        deadline: "社招开放",
+        score: 77,
+        urgent: false,
+        reason: "适合准备 1 页企业简历，突出论文、代码能力和项目结果。"
+      }
+    ];
+
+    const dailyMessage = document.querySelector("#dailyMessage");
+    const todayText = document.querySelector("#todayText");
+    const refreshText = document.querySelector("#refreshText");
+    const jobList = document.querySelector("#jobList");
+    const toast = document.querySelector("#toast");
+    const dayNumber = Math.floor(Date.now() / 86400000);
+    let messageIndex = dayNumber % messages.length;
+    let activeFilter = "all";
+
+    function formatToday() {
+      const formatter = new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "short" });
+      todayText.textContent = formatter.format(new Date()) + " 已刷新";
+    }
+
+    function seededJobs() {
+      const offset = dayNumber % jobs.length;
+      return [...jobs.slice(offset), ...jobs.slice(0, offset)];
+    }
+
+    function renderJobs() {
+      const visibleJobs = seededJobs().filter((job) => {
+        if (activeFilter === "all") return true;
+        if (activeFilter === "urgent") return job.urgent;
+        return job.type === activeFilter;
+      });
+
+      jobList.innerHTML = visibleJobs.map((job) => `
+        <article class="job">
+          <div class="job-top">
+            <div>
+              <h3>${job.title}</h3>
+              <div class="job-meta">
+                <span class="badge">${job.type}</span>
+                ${job.urgent ? '<span class="badge urgent">快截止</span>' : ''}
+                <span>${job.org}</span>
+                <span>${job.city}</span>
+                <span>${job.deadline}</span>
+              </div>
+            </div>
+            <div class="score" style="--score: ${job.score}"><span>${job.score}</span></div>
+          </div>
+          <p class="reason">${job.reason}</p>
+          <div class="job-actions">
+            <button class="ghost" data-action="save">先收藏</button>
+            <button class="primary" data-action="prepare">准备投递</button>
+          </div>
+        </article>
+      `).join("");
+
+      document.querySelector("#applyCount").textContent = visibleJobs.length;
+      document.querySelector("#urgentCount").textContent = seededJobs().filter((job) => job.urgent).length;
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    document.querySelector("#nextMessage").addEventListener("click", () => {
+      messageIndex = (messageIndex + 1) % messages.length;
+      dailyMessage.textContent = messages[messageIndex];
+    });
+
+    document.querySelector("#saveMessage").addEventListener("click", () => {
+      localStorage.setItem("baobao-favorite-message", dailyMessage.textContent);
+      showToast("这句话已经收藏好啦。");
+    });
+
+    document.querySelector("#refreshButton").addEventListener("click", () => {
+      refreshText.textContent = "刚刚手动刷新过";
+      showToast("今日推荐已经刷新。");
+      renderJobs();
+    });
+
+    document.querySelectorAll(".chip").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        renderJobs();
+      });
+    });
+
+    jobList.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      if (button.dataset.action === "save") {
+        showToast("已放进宝宝老婆的备选清单。");
+      }
+      if (button.dataset.action === "prepare") {
+        const current = Number(document.querySelector("#pendingCount").textContent);
+        document.querySelector("#pendingCount").textContent = current + 1;
+        showToast("已经加入待准备投递，等宝宝老婆看一眼。");
+      }
+    });
+
+    document.querySelectorAll(".bottom-nav a").forEach((link) => {
+      link.addEventListener("click", () => {
+        document.querySelectorAll(".bottom-nav a").forEach((item) => item.classList.remove("active"));
+        link.classList.add("active");
+      });
+    });
+
+    formatToday();
+    dailyMessage.textContent = messages[messageIndex];
+    renderJobs();
+
+    if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+      navigator.serviceWorker.register("./baobao-laopo-sw.js");
+    }
+  </script>
+</body>
+</html>

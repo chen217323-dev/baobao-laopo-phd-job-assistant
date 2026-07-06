@@ -1,0 +1,6 @@
+{
+  "buildCommand": "node -e \"import('node:fs').then(fs=>fs.existsSync('work/crawler/crawl-jobs.mjs')?import('./work/crawler/crawl-jobs.mjs'):console.log('skip crawl: crawler file not uploaded yet'))\"",
+  "outputDirectory": "outputs/app",
+  "cleanUrls": true,
+  "trailingSlash": false
+}

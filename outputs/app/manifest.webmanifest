@@ -1,0 +1,24 @@
+{
+  "name": "宝宝老婆博士求职助手",
+  "short_name": "博士求职",
+  "description": "每天给宝宝老婆刷新可投岗位、材料进度和老公今日支持。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6fbff",
+  "theme_color": "#dff2ff",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

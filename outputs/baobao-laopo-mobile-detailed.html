@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#dff2ff" />
+  <title>宝宝老婆博士求职助手 - 详细岗位版</title>
+  <style>
+    :root {
+      --bg: #f6fbff;
+      --paper: #ffffff;
+      --blue-50: #edf8ff;
+      --blue-100: #dff2ff;
+      --blue-200: #b8ddf4;
+      --blue-500: #4f9fd8;
+      --blue-700: #1f5874;
+      --ink: #213847;
+      --muted: #6b7f8d;
+      --line: #d9e9f4;
+      --gold: #eeb75d;
+      --red: #c35666;
+      --shadow: 0 18px 42px rgba(31, 88, 116, .13);
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% -10%, rgba(184, 221, 244, .75), transparent 18rem),
+        linear-gradient(180deg, #f6fbff 0%, #ffffff 46%, #eef8ff 100%);
+      letter-spacing: 0;
+    }
+    button, select { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .phone-app {
+      width: min(100%, 520px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 18px 14px calc(92px + env(safe-area-inset-bottom));
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 2px 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .fortune-widget {
+      display: grid;
+      gap: 2px;
+      width: 94px;
+      min-height: 54px;
+      padding: 8px 10px;
+      border: 1px solid rgba(79, 159, 216, .18);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, #dff2ff, #ffffff);
+      color: var(--blue-700);
+      box-shadow: 0 8px 18px rgba(31, 88, 116, .1);
+      flex: 0 0 auto;
+    }
+    .fortune-widget small {
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .fortune-widget strong {
+      color: var(--blue-700);
+      font-size: 15px;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .fortune-widget span {
+      color: #4f7890;
+      font-size: 10px;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.15;
+      color: var(--blue-700);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .brand p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+    .brand-title {
+      min-width: 0;
+    }
+    .refresh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 5px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--blue-500);
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .top-logo {
+      width: 54px;
+      height: 54px;
+      border: 1px solid rgba(79, 159, 216, .18);
+      border-radius: var(--radius);
+      object-fit: cover;
+      box-shadow: 0 8px 18px rgba(31, 88, 116, .12);
+      flex: 0 0 auto;
+    }
+    .round-button {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, .82);
+      color: var(--blue-700);
+      cursor: pointer;
+    }
+
+    .support {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      border: 1px solid rgba(184, 221, 244, .9);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255,255,255,.96), rgba(223,242,255,.82));
+      box-shadow: var(--shadow);
+    }
+    .support small { display: block; margin-bottom: 8px; color: var(--blue-500); font-weight: 800; }
+    .support blockquote { margin: 0; font-size: 20px; line-height: 1.48; color: #2d4b5d; }
+    .support footer { margin-top: 12px; color: var(--muted); font-size: 13px; }
+    .support-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+
+    .data-note {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border: 1px solid #ffe1a8;
+      border-radius: var(--radius);
+      background: #fff8e8;
+      color: #8a6425;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .pill-button, .primary, .ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pill-button {
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--blue-700);
+    }
+    .primary { border: 0; background: var(--blue-700); color: #fff; box-shadow: 0 10px 20px rgba(31,88,116,.18); }
+    .ghost { border: 1px solid var(--line); background: #fff; color: var(--blue-700); }
+
+    .today-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 0;
+    }
+    .mini-stat {
+      min-height: 78px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.86);
+    }
+    .mini-stat span { display: block; color: var(--muted); font-size: 12px; }
+    .mini-stat strong { display: block; margin-top: 7px; color: var(--blue-700); font-size: 26px; line-height: 1; }
+
+    .section { margin-top: 18px; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      padding: 0 2px;
+    }
+    .section h2 { margin: 0; color: var(--blue-700); font-size: 18px; }
+    .section-head span { color: var(--muted); font-size: 12px; white-space: nowrap; }
+
+    .filters { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 10px; scrollbar-width: none; }
+    .filters::-webkit-scrollbar { display: none; }
+    .chip {
+      flex: 0 0 auto;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      color: #526a79;
+      cursor: pointer;
+    }
+    .chip.active { border-color: var(--blue-500); background: var(--blue-100); color: var(--blue-700); font-weight: 700; }
+
+    .jobs { display: grid; gap: 12px; }
+    .job {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 10px 24px rgba(31,88,116,.08);
+    }
+    .job-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+    .job h3 { margin: 0 0 7px; font-size: 16px; line-height: 1.3; color: #233b4a; }
+    .job-meta { display: flex; flex-wrap: wrap; gap: 6px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 23px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--blue-50);
+      color: var(--blue-700);
+      font-weight: 700;
+    }
+    .badge.urgent { background: #fff1f3; color: var(--red); }
+    .score {
+      display: grid;
+      place-items: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue-500) calc(var(--score) * 1%), #e8f2f8 0);
+      color: var(--blue-700);
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .score span { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #fff; }
+    .reason { margin: 11px 0 12px; color: #536b79; font-size: 13px; line-height: 1.55; }
+    .detail-preview {
+      display: grid;
+      gap: 6px;
+      margin: 0 0 12px;
+      padding: 10px;
+      border-radius: var(--radius);
+      background: #f7fbff;
+      color: #536b79;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .job-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .job-actions button { min-height: 40px; padding: 0 8px; }
+
+    .status-card {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+    }
+    .task { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; min-height: 48px; }
+    .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--blue-500); box-shadow: 0 0 0 5px rgba(79,159,216,.12); }
+    .task strong { display: block; color: #2d4b5d; font-size: 14px; }
+    .task span { color: var(--muted); font-size: 12px; }
+    .deadline { color: var(--blue-500); font-size: 12px; font-weight: 800; white-space: nowrap; }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px;
+      width: min(100%, 520px);
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      border-top: 1px solid rgba(217,233,244,.95);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(18px);
+    }
+    .bottom-nav a { display: grid; place-items: center; gap: 3px; min-height: 48px; border-radius: var(--radius); color: #607786; text-decoration: none; font-size: 11px; }
+    .bottom-nav a.active { background: var(--blue-100); color: var(--blue-700); font-weight: 800; }
+
+    .drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      background: rgba(20, 43, 56, .38);
+    }
+    .drawer.open { display: block; }
+    .drawer-panel {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: min(100%, 520px);
+      max-height: 88vh;
+      padding: 14px 14px calc(18px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      overflow: auto;
+      border-radius: 16px 16px 0 0;
+      background: #fff;
+      box-shadow: 0 -18px 42px rgba(20,43,56,.18);
+    }
+    .drawer-head {
+      position: sticky;
+      top: -14px;
+      z-index: 2;
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0 12px;
+      background: #fff;
+    }
+    .drawer-head h2 { margin: 0; color: var(--blue-700); font-size: 19px; line-height: 1.3; }
+    .drawer-head p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    .detail-grid { display: grid; gap: 10px; }
+    .detail-box {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+    .detail-box h3 { margin: 0 0 8px; color: #2d4b5d; font-size: 14px; }
+    .detail-box p, .detail-box li { color: #536b79; font-size: 13px; line-height: 1.55; }
+    .detail-box p { margin: 0; }
+    .detail-box ul { margin: 0; padding-left: 18px; }
+    .kv { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 8px; margin-top: 7px; font-size: 13px; }
+    .kv span:first-child { color: var(--muted); }
+    .kv span:last-child { color: #2d4b5d; }
+    .drawer-actions { position: sticky; bottom: -14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 12px; background: #fff; }
+    .drawer-actions button { min-height: 42px; }
+    .raw-text {
+      max-height: 180px;
+      overflow: auto;
+      white-space: pre-wrap;
+      color: #536b79;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(78px + env(safe-area-inset-bottom));
+      z-index: 40;
+      width: min(460px, calc(100% - 28px));
+      padding: 12px 14px;
+      transform: translate(-50%, 16px);
+      border: 1px solid rgba(184,221,244,.96);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.96);
+      box-shadow: var(--shadow);
+      color: #2d4b5d;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+</head>
+<body>
+  <main class="phone-app">
+    <header class="top">
+      <div class="brand">
+        <div class="fortune-widget" aria-label="今日流日运势">
+          <small>今日流日</small>
+          <strong id="dayPillar">壬子日</strong>
+          <span id="fortuneHint">水气足，宜稳投</span>
+        </div>
+        <div class="brand-title">
+          <h1>宝宝老婆博士求职助手</h1>
+          <p id="todayText">今日详细岗位已刷新</p>
+          <button class="refresh-link" id="refreshButton" title="刷新今日推荐">刷新今日推荐</button>
+        </div>
+      </div>
+      <img class="top-logo" src="./huaju-maomao-logo.jpg" alt="花橘毛毛 AI 创作平台 logo" />
+    </header>
+
+    <section class="support" id="home">
+      <small>老公今日支持</small>
+      <blockquote id="dailyMessage">宝宝老婆，今天也慢慢来。你已经走了很远，接下来我陪你一件一件完成。</blockquote>
+      <footer>— 老公</footer>
+      <div class="support-actions">
+        <button class="pill-button" id="nextMessage">换一句</button>
+        <button class="pill-button" id="saveMessage">收藏</button>
+      </div>
+    </section>
+
+    <div class="data-note" id="dataNote">
+      当前是原型演示数据，不是实时抓取结果。接入真实抓取器后，这里会显示来自学校、公司和韩国招聘页的真实岗位，并保留原文链接。
+    </div>
+
+    <section class="today-strip" aria-label="今日数据">
+      <div class="mini-stat"><span>今日采集</span><strong id="applyCount">0</strong></div>
+      <div class="mini-stat"><span>快截止</span><strong id="urgentCount">0</strong></div>
+      <div class="mini-stat"><span>待准备</span><strong id="pendingCount">4</strong></div>
+    </section>
+
+    <section class="section" id="jobs">
+      <div class="section-head">
+        <h2>今天采集到的机会</h2>
+        <span id="refreshText">每类 20-30 条</span>
+      </div>
+      <div class="filters" aria-label="岗位筛选">
+        <button class="chip active" data-filter="all">全部</button>
+        <button class="chip" data-filter="中国高校">中国高校</button>
+        <button class="chip" data-filter="中国公司">中国公司</button>
+        <button class="chip" data-filter="韩国机会">韩国机会</button>
+        <button class="chip" data-filter="urgent">快截止</button>
+      </div>
+      <div class="jobs" id="jobList"></div>
+    </section>
+
+    <section class="section" id="materials">
+      <div class="section-head"><h2>材料进度</h2><span>投前看一眼</span></div>
+      <div class="status-card">
+        <div class="task"><span class="dot"></span><div><strong>高校中文材料包</strong><span>中文 CV、研究计划、论文清单</span></div><span class="deadline">76%</span></div>
+        <div class="task"><span class="dot"></span><div><strong>企业研发 1 页简历</strong><span>突出项目、技能、成果指标</span></div><span class="deadline">54%</span></div>
+        <div class="task"><span class="dot"></span><div><strong>韩国 PI 联系邮件</strong><span>英文邮件和韩文短介绍</span></div><span class="deadline">43%</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="apply">
+      <div class="section-head"><h2>今天的小目标</h2><span>不用贪多</span></div>
+      <div class="status-card">
+        <div class="task"><span class="dot"></span><div><strong>认真看 2 个岗位详情</strong><span>先判断条件和材料是否值得准备</span></div><span class="deadline">今天</span></div>
+        <div class="task"><span class="dot"></span><div><strong>准备 1 个高校岗位材料包</strong><span>优先快截止且匹配度高的岗位</span></div><span class="deadline">稳稳来</span></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="手机导航">
+    <a class="active" href="#home">今日</a>
+    <a href="#jobs">岗位</a>
+    <a href="#materials">材料</a>
+    <a href="#apply">投递</a>
+  </nav>
+
+  <section class="drawer" id="detailDrawer" aria-hidden="true">
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-label="岗位详情">
+      <div class="drawer-head">
+        <div>
+          <h2 id="detailTitle">岗位详情</h2>
+          <p id="detailSub">学校 / 岗位 / 截止日期</p>
+        </div>
+        <button class="round-button" id="closeDetail" title="关闭">×</button>
+      </div>
+      <div class="detail-grid" id="detailBody"></div>
+      <div class="drawer-actions">
+        <button class="ghost" id="detailSave">收藏岗位</button>
+        <button class="primary" id="detailPrepare">准备投递</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="toast" id="toast">已经记录好啦。</div>
+
+  <script src="./jobs-data.js"></script>
+  <script>
+    const messages = [
+      "宝宝老婆，今天也慢慢来。你已经走了很远，接下来我陪你一件一件完成。",
+      "不管今天有没有好消息，你都不是一个人在面对这些。我一直站在你这边。",
+      "今天先处理最重要的一件事就好。其他的，我们明天再一起看。",
+      "你已经很优秀了，求职只是让合适的地方看见你。",
+      "宝宝老婆负责勇敢，我负责帮你把路照亮一点。",
+      "如果今天觉得累，就先休息一下。机会很多，但你只有一个，要先照顾好你。",
+      "每一次投递都不是被评价，而是在寻找真正适合你的地方。",
+      "今天也相信你。不是因为结果已经确定，而是因为我知道你有多认真。"
+    ];
+
+    const jobs = [
+      {
+        id: "cn-univ-001",
+        type: "中国高校",
+        title: "青年教师 / 特聘研究员",
+        org: "南京大学",
+        department: "人工智能学院 / 计算机学院",
+        city: "南京",
+        source: "高校人才招聘公告",
+        sourceUrl: "https://example.edu.cn/job/001",
+        publishDate: "2026-07-06",
+        deadline: "2026-07-09",
+        deadlineText: "3 天后截止",
+        score: 92,
+        urgent: true,
+        reason: "方向匹配度高，明确欢迎海外博士。建议今天优先准备中文 CV 和 3 年科研计划。",
+        requirements: [
+          "具有博士学位，人工智能、计算机、电子信息、数据科学等相关方向优先。",
+          "具有海外学习或科研经历者优先，韩国博士背景可作为优势说明。",
+          "近五年有高水平论文、科研项目或代表性成果。",
+          "能够承担本科生或研究生课程，具备科研团队建设潜力。"
+        ],
+        benefits: [
+          "提供有竞争力年薪，具体按学校人才层次和学院政策面议。",
+          "可申请安家费、科研启动经费和地方人才补贴。",
+          "协助申请人才公寓，支持博士后或青年人才项目。"
+        ],
+        materials: ["中文简历", "英文 CV", "代表性论文 3-5 篇", "研究计划", "教学计划", "学历学位证明"],
+        contact: { name: "学院人事秘书", email: "hr-college@example.edu.cn", phone: "025-00000000" },
+        method: "将申请材料发送至学院联系人邮箱，邮件标题建议写：姓名+博士毕业学校+应聘岗位。",
+        rawText: "公告原文会完整保存。包含招聘岗位、学科方向、应聘条件、待遇支持、申请材料、联系人和截止时间。这里展示的是示例原文摘要，正式抓取时会把网页正文完整存入 raw_text 字段。"
+      },
+      {
+        id: "cn-univ-002",
+        type: "中国高校",
+        title: "博士后 / 师资博士后",
+        org: "西湖大学",
+        department: "智能计算与交叉科学中心",
+        city: "杭州",
+        source: "研究院官网",
+        sourceUrl: "https://example.org/postdoc",
+        publishDate: "2026-07-05",
+        deadline: "长期招聘",
+        deadlineText: "长期招聘",
+        score: 88,
+        urgent: false,
+        reason: "适合作为稳妥选项，可以先联系 PI，再决定是否正式投递。",
+        requirements: [
+          "已获得或即将获得博士学位，年龄一般不超过 35 周岁。",
+          "研究方向包括机器学习、数据挖掘、医学 AI、智能系统等。",
+          "具备独立开展科研工作的能力，有英文论文写作经验。"
+        ],
+        benefits: [
+          "年薪和绩效按研究院博士后政策执行。",
+          "支持申报博士后基金、省市人才计划和科研项目。",
+          "优秀者可推荐申请师资岗位或长期聘用岗位。"
+        ],
+        materials: ["个人简历", "博士论文摘要", "代表性成果", "推荐人信息", "拟开展研究计划"],
+        contact: { name: "PI 团队联系人", email: "pi-team@example.org", phone: "" },
+        method: "建议先给 PI 发英文或中文邮件，确认方向匹配后再提交正式材料。",
+        rawText: "公告原文会保存导师团队介绍、招收方向、博士后待遇、出站发展路径和联系方式。"
+      },
+      {
+        id: "cn-company-001",
+        type: "中国公司",
+        title: "研发科学家 / 企业研究院",
+        org: "华为技术有限公司",
+        department: "中央研究院",
+        city: "深圳",
+        source: "公司招聘官网",
+        sourceUrl: "https://example.com/careers/rd",
+        publishDate: "2026-07-06",
+        deadline: "社招开放",
+        deadlineText: "本周新发",
+        score: 84,
+        urgent: false,
+        reason: "看重论文和工程落地，可以把博士项目改写成产品和指标语言。",
+        requirements: [
+          "博士学历，计算机、AI、自动化、电子信息等相关专业。",
+          "熟悉 Python、深度学习框架或大规模数据处理。",
+          "有顶会论文、专利、开源项目或产业合作经历优先。",
+          "能把研究问题转化为产品方案和实验指标。"
+        ],
+        benefits: [
+          "薪资面议，博士专项人才通道。",
+          "提供研发资源、算力平台、团队导师和项目奖金。",
+          "可协助办理落户、人才补贴和租房支持。"
+        ],
+        materials: ["1 页中文简历", "英文简历", "项目作品集", "论文和代码链接", "简短自我介绍"],
+        contact: { name: "HR 招聘组", email: "research-hiring@example.com", phone: "" },
+        method: "通过公司官网投递，也可把简历发给 HR 邮箱；企业版简历应突出成果指标。",
+        rawText: "岗位原文会保存岗位职责、任职要求、加分项、团队介绍、投递入口和工作地点。"
+      },
+      {
+        id: "kr-univ-001",
+        type: "韩国机会",
+        title: "Postdoc Researcher",
+        org: "Seoul National University",
+        department: "AI and Data Science Lab",
+        city: "Seoul",
+        source: "University Lab Website",
+        sourceUrl: "https://example.ac.kr/lab/jobs",
+        publishDate: "2026-07-04",
+        deadline: "2026-07-11",
+        deadlineText: "5 天后截止",
+        score: 81,
+        urgent: true,
+        reason: "支持英文申请，适合作为留韩备选。需要一封简短英文联系邮件。",
+        requirements: [
+          "PhD in Computer Science, AI, Data Science, or related fields.",
+          "Strong publication record and independent research ability.",
+          "English application accepted; Korean language is helpful but not mandatory.",
+          "Experience with collaborative research projects is preferred."
+        ],
+        benefits: [
+          "Salary follows university postdoctoral researcher policy.",
+          "Support for research publications, conference travel, and visa documents.",
+          "Possible extension depending on funding and performance."
+        ],
+        materials: ["English CV", "Publication list", "Research statement", "Contact information of references", "Cover email"],
+        contact: { name: "Professor / Lab Manager", email: "lab-hiring@example.ac.kr", phone: "" },
+        method: "Send English CV and research statement by email. Email subject: Postdoc Application - Name - Research Area.",
+        rawText: "The original posting text will be saved, including lab introduction, research topics, qualifications, salary notes, required documents, and contact email."
+      }
+    ];
+
+    const batchTemplates = {
+      "中国高校": {
+        target: 30,
+        orgs: [
+          "北京大学", "清华大学", "复旦大学", "上海交通大学", "南京大学",
+          "浙江大学", "中国科学技术大学", "哈尔滨工业大学", "西安交通大学", "华中科技大学",
+          "武汉大学", "中山大学", "同济大学", "北京航空航天大学", "北京理工大学",
+          "电子科技大学", "东南大学", "天津大学", "南开大学", "厦门大学",
+          "山东大学", "吉林大学", "大连理工大学", "湖南大学", "重庆大学",
+          "四川大学", "华南理工大学", "苏州大学", "南方科技大学", "西湖大学"
+        ],
+        titles: ["青年教师", "特聘研究员", "师资博士后", "博士后研究员", "科研助理教授", "专任教师"],
+        departments: ["人工智能学院", "计算机学院", "电子信息学院", "数据科学研究院", "交叉科学中心", "智能系统实验室"],
+        cities: ["北京", "上海", "南京", "杭州", "广州", "深圳", "武汉", "西安", "成都", "天津"],
+        requirement: "具有博士学位，人工智能、计算机、电子信息、数据科学等相关方向优先。",
+        benefit: "可申请安家费、科研启动经费、人才公寓和地方人才补贴。",
+        materials: ["中文简历", "英文 CV", "代表性论文", "研究计划", "教学计划", "学历学位证明"]
+      },
+      "中国公司": {
+        target: 30,
+        orgs: [
+          "华为技术有限公司", "腾讯科技", "阿里巴巴达摩院", "字节跳动", "百度智能云",
+          "美团", "京东科技", "小米集团", "网易伏羲", "商汤科技",
+          "旷视科技", "科大讯飞", "大疆创新", "比亚迪", "宁德时代",
+          "理想汽车", "蔚来汽车", "小鹏汽车", "地平线机器人", "寒武纪",
+          "海康威视", "大华股份", "中兴通讯", "联想研究院", "蚂蚁集团",
+          "快手科技", "携程集团", "哔哩哔哩", "拼多多", "中国移动研究院"
+        ],
+        titles: ["研发科学家", "算法研究员", "高级数据科学家", "AI 研究工程师", "企业研究院博士岗", "技术专家"],
+        departments: ["中央研究院", "AI 平台部", "算法研究部", "数据智能部", "产业研究院", "前沿技术中心"],
+        cities: ["北京", "上海", "深圳", "杭州", "广州", "苏州", "南京", "成都", "武汉", "西安"],
+        requirement: "博士学历，熟悉机器学习、深度学习、数据分析或工程系统，有论文、专利或项目落地经验优先。",
+        benefit: "博士人才通道，薪资面议，可支持落户、人才补贴、项目奖金和研发资源。",
+        materials: ["1 页中文简历", "英文简历", "项目作品集", "论文链接", "代码链接", "简短自我介绍"]
+      },
+      "韩国机会": {
+        target: 20,
+        orgs: [
+          "Seoul National University", "KAIST", "POSTECH", "Yonsei University", "Korea University",
+          "Sungkyunkwan University", "Hanyang University", "UNIST", "DGIST", "GIST",
+          "Pusan National University", "Kyung Hee University", "Ewha Womans University", "Sogang University", "Chung-Ang University",
+          "Samsung Research", "LG AI Research", "SK Hynix", "NAVER AI Lab", "Kakao Brain"
+        ],
+        titles: ["Postdoc Researcher", "Research Professor", "AI Research Scientist", "Data Scientist", "Research Engineer"],
+        departments: ["AI Lab", "Data Science Lab", "Computer Science Department", "Research Center", "Corporate R&D"],
+        cities: ["Seoul", "Daejeon", "Pohang", "Busan", "Incheon", "Suwon", "Seongnam", "Daegu"],
+        requirement: "PhD in Computer Science, AI, Data Science, Engineering, or related fields. English application accepted for selected roles.",
+        benefit: "Salary follows university or company policy, with possible visa document support and research resources.",
+        materials: ["English CV", "Publication list", "Research statement", "Cover email", "Reference contacts"]
+      }
+    };
+
+    function makeBatchJob(type, index) {
+      const template = batchTemplates[type];
+      const org = template.orgs[index % template.orgs.length];
+      const title = template.titles[index % template.titles.length];
+      const department = template.departments[index % template.departments.length];
+      const city = template.cities[index % template.cities.length];
+      const days = 5 + (index % 24);
+      const urgent = index % 11 === 0 || days <= 7;
+      const score = 91 - (index % 18);
+
+      return {
+        id: `${type === "中国高校" ? "cn-univ" : type === "中国公司" ? "cn-company" : "kr-role"}-batch-${String(index + 1).padStart(2, "0")}`,
+        type,
+        title,
+        org,
+        department,
+        city,
+        source: type === "中国高校" ? "高校/学院招聘页" : type === "中国公司" ? "公司招聘官网" : "韩国高校/公司招聘页",
+        sourceUrl: "https://example.com/detail",
+        publishDate: "2026-07-06",
+        deadline: urgent ? `2026-07-${String(8 + (index % 18)).padStart(2, "0")}` : "长期招聘 / 滚动招聘",
+        deadlineText: urgent ? `${days} 天后截止` : "滚动招聘",
+        score,
+        urgent,
+        reason: type === "中国高校"
+          ? "高校岗位优先采集，适合先看学科方向、人才待遇和材料要求。"
+          : type === "中国公司"
+            ? "企业研发岗位适合准备 1 页简历，重点看技术方向和博士专项通道。"
+            : "韩国机会作为补充，重点看英文申请、签证支持和是否需要韩语。",
+        requirements: [
+          template.requirement,
+          type === "中国高校" ? "有高水平论文、科研项目、教学潜力或海外博士经历者优先。" : "具备独立研究、工程实现或跨团队协作经验。",
+          type === "韩国机会" ? "Korean language is helpful but not always mandatory." : "应届博士或近年毕业博士均可重点关注。"
+        ],
+        benefits: [
+          template.benefit,
+          type === "中国高校" ? "具体待遇以学院、学校和地方人才政策为准。" : "具体薪酬和福利以正式沟通为准。"
+        ],
+        materials: template.materials,
+        contact: {
+          name: type === "中国高校" ? "学院/人事联系人" : type === "中国公司" ? "HR 招聘组" : "Professor / HR",
+          email: type === "韩国机会" ? "hiring@example.ac.kr" : "hiring@example.cn",
+          phone: ""
+        },
+        method: type === "中国高校"
+          ? "建议打开原文确认邮件标题、申请表和附件命名要求，再投递完整材料包。"
+          : type === "中国公司"
+            ? "建议通过官网投递，并同步准备给 HR 的简短自我介绍。"
+            : "Send English CV and short cover email. Check whether visa support and Korean language are required.",
+        rawText: "真实抓取时，这里保存招聘详情页全文，包括岗位职责、任职条件、待遇、材料清单、联系方式、截止时间和原文链接。"
+      };
+    }
+
+    Object.keys(batchTemplates).forEach((type) => {
+      const existing = jobs.filter((job) => job.type === type).length;
+      const target = batchTemplates[type].target;
+      for (let index = existing; index < target; index += 1) {
+        jobs.push(makeBatchJob(type, index));
+      }
+    });
+
+    if (window.REAL_JOBS_PAYLOAD?.jobs?.length) {
+      jobs.splice(0, jobs.length, ...window.REAL_JOBS_PAYLOAD.jobs);
+    }
+
+    const dailyMessage = document.querySelector("#dailyMessage");
+    const todayText = document.querySelector("#todayText");
+    const refreshText = document.querySelector("#refreshText");
+    const jobList = document.querySelector("#jobList");
+    const toast = document.querySelector("#toast");
+    const drawer = document.querySelector("#detailDrawer");
+    const detailTitle = document.querySelector("#detailTitle");
+    const detailSub = document.querySelector("#detailSub");
+    const detailBody = document.querySelector("#detailBody");
+    const dataNote = document.querySelector("#dataNote");
+    const dayPillar = document.querySelector("#dayPillar");
+    const fortuneHint = document.querySelector("#fortuneHint");
+    const dayNumber = Math.floor(Date.now() / 86400000);
+    let messageIndex = dayNumber % messages.length;
+    let activeFilter = "all";
+    let activeJobId = null;
+
+    function today() {
+      const formatter = new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "short" });
+      todayText.textContent = formatter.format(new Date()) + " 已刷新";
+      if (window.REAL_JOBS_PAYLOAD?.jobs?.length) {
+        const generated = new Date(window.REAL_JOBS_PAYLOAD.generatedAt);
+        const generatedText = new Intl.DateTimeFormat("zh-CN", {
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit"
+        }).format(generated);
+        dataNote.textContent = `当前显示真实网页抓取结果，共 ${window.REAL_JOBS_PAYLOAD.jobs.length} 条，生成时间：${generatedText}。投递前请打开原文核对最终条件和截止日期。`;
+      }
+    }
+
+    function updateFortune() {
+      const stems = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"];
+      const branches = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+      const elements = {
+        甲: "木", 乙: "木", 丙: "火", 丁: "火", 戊: "土", 己: "土", 庚: "金", 辛: "金", 壬: "水", 癸: "水",
+        子: "水", 亥: "水", 寅: "木", 卯: "木", 巳: "火", 午: "火", 申: "金", 酉: "金", 辰: "土", 戌: "土", 丑: "土", 未: "土"
+      };
+      const anchor = Date.UTC(2000, 0, 1);
+      const todayUtc = Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+      const days = Math.floor((todayUtc - anchor) / 86400000);
+      const index = (days + 4 + 6000) % 60;
+      const stem = stems[index % 10];
+      const branch = branches[index % 12];
+      const stemElement = elements[stem];
+      const branchElement = elements[branch];
+      dayPillar.textContent = `${stem}${branch}日`;
+      fortuneHint.textContent = stemElement === "水" || branchElement === "水" ? "水气足，宜稳投" : `今日${stemElement}${branchElement}，宜筛选`;
+    }
+
+    function seededJobs() {
+      const offset = dayNumber % jobs.length;
+      return [...jobs.slice(offset), ...jobs.slice(0, offset)];
+    }
+
+    function list(items) {
+      return `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>`;
+    }
+
+    function renderJobs() {
+      const visible = seededJobs().filter((job) => {
+        if (activeFilter === "all") return true;
+        if (activeFilter === "urgent") return job.urgent;
+        return job.type === activeFilter;
+      });
+
+      jobList.innerHTML = visible.map((job) => `
+        <article class="job">
+          <div class="job-top">
+            <div>
+              <h3>${job.title}</h3>
+              <div class="job-meta">
+                <span class="badge">${job.type}</span>
+                ${job.urgent ? '<span class="badge urgent">快截止</span>' : ''}
+                <span>${job.org}</span>
+                <span>${job.city}</span>
+                <span>${job.deadlineText}</span>
+              </div>
+            </div>
+            <div class="score" style="--score: ${job.score}"><span>${job.score}</span></div>
+          </div>
+          <p class="reason">${job.reason}</p>
+          <div class="detail-preview">
+            <span>条件：${job.requirements[0]}</span>
+            <span>材料：${job.materials.slice(0, 3).join("、")} 等</span>
+          </div>
+          <div class="job-actions">
+            <button class="ghost" data-action="detail" data-id="${job.id}">看详情</button>
+            <button class="ghost" data-action="save" data-id="${job.id}">收藏</button>
+            <button class="primary" data-action="prepare" data-id="${job.id}">准备</button>
+          </div>
+        </article>
+      `).join("");
+
+      document.querySelector("#applyCount").textContent = visible.length;
+      document.querySelector("#urgentCount").textContent = seededJobs().filter((job) => job.urgent).length;
+    }
+
+    function openDetail(id) {
+      const job = jobs.find((item) => item.id === id);
+      if (!job) return;
+      activeJobId = id;
+      detailTitle.textContent = job.title;
+      detailSub.textContent = `${job.org} · ${job.department} · ${job.deadlineText}`;
+      detailBody.innerHTML = `
+        <section class="detail-box">
+          <h3>基础信息</h3>
+          <div class="kv"><span>单位</span><span>${job.org}</span></div>
+          <div class="kv"><span>学院/部门</span><span>${job.department}</span></div>
+          <div class="kv"><span>地点</span><span>${job.city}</span></div>
+          <div class="kv"><span>发布时间</span><span>${job.publishDate}</span></div>
+          <div class="kv"><span>截止时间</span><span>${job.deadline}</span></div>
+          <div class="kv"><span>来源</span><span>${job.source}</span></div>
+        </section>
+        <section class="detail-box"><h3>为什么值得看</h3><p>${job.reason}</p></section>
+        <section class="detail-box"><h3>岗位条件</h3>${list(job.requirements)}</section>
+        <section class="detail-box"><h3>待遇支持</h3>${list(job.benefits)}</section>
+        <section class="detail-box"><h3>申请材料</h3>${list(job.materials)}</section>
+        <section class="detail-box">
+          <h3>联系方式和投递方式</h3>
+          <div class="kv"><span>联系人</span><span>${job.contact.name}</span></div>
+          <div class="kv"><span>邮箱</span><span>${job.contact.email}</span></div>
+          <div class="kv"><span>电话</span><span>${job.contact.phone || "公告未写明"}</span></div>
+          <p style="margin-top:10px">${job.method}</p>
+        </section>
+        <section class="detail-box"><h3>原文详情保存</h3><div class="raw-text">${job.rawText}</div></section>
+      `;
+      drawer.classList.add("open");
+      drawer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeDetail() {
+      drawer.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+    }
+
+    function showToast(text) {
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    document.querySelector("#nextMessage").addEventListener("click", () => {
+      messageIndex = (messageIndex + 1) % messages.length;
+      dailyMessage.textContent = messages[messageIndex];
+    });
+    document.querySelector("#saveMessage").addEventListener("click", () => {
+      localStorage.setItem("baobao-favorite-message", dailyMessage.textContent);
+      showToast("这句话已经收藏好啦。");
+    });
+    document.querySelector("#refreshButton").addEventListener("click", () => {
+      refreshText.textContent = "刚刚手动刷新过";
+      showToast("详细岗位列表已刷新。");
+      renderJobs();
+    });
+    document.querySelectorAll(".chip").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".chip").forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        renderJobs();
+      });
+    });
+    jobList.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button) return;
+      if (button.dataset.action === "detail") openDetail(button.dataset.id);
+      if (button.dataset.action === "save") showToast("已放进宝宝老婆的备选清单。");
+      if (button.dataset.action === "prepare") {
+        const pending = document.querySelector("#pendingCount");
+        pending.textContent = Number(pending.textContent) + 1;
+        showToast("已加入待准备投递。");
+      }
+    });
+    document.querySelector("#closeDetail").addEventListener("click", closeDetail);
+    drawer.addEventListener("click", (event) => { if (event.target === drawer) closeDetail(); });
+    document.querySelector("#detailSave").addEventListener("click", () => showToast("这个岗位已经收藏好啦。"));
+    document.querySelector("#detailPrepare").addEventListener("click", () => {
+      const pending = document.querySelector("#pendingCount");
+      pending.textContent = Number(pending.textContent) + 1;
+      showToast("已加入待准备投递，等宝宝老婆看一眼。");
+    });
+    document.querySelectorAll(".bottom-nav a").forEach((link) => {
+      link.addEventListener("click", () => {
+        document.querySelectorAll(".bottom-nav a").forEach((item) => item.classList.remove("active"));
+        link.classList.add("active");
+      });
+    });
+
+    today();
+    updateFortune();
+    dailyMessage.textContent = messages[messageIndex];
+    renderJobs();
+  </script>
+</body>
+</html>

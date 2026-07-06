@@ -1,0 +1,974 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>宝宝老婆博士求职助手</title>
+  <style>
+    :root {
+      --cream: #f7fbff;
+      --paper: #ffffff;
+      --rose: #d7ecff;
+      --rose-strong: #4f9fd8;
+      --green: #7fb8d8;
+      --green-dark: #1f5874;
+      --mint: #e7f5ff;
+      --gold: #eeb75d;
+      --ink: #243846;
+      --muted: #6a7f8b;
+      --line: #d9e9f4;
+      --shadow: 0 18px 45px rgba(38, 87, 114, .12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(181, 224, 255, .42), transparent 34rem),
+        linear-gradient(135deg, #f7fbff 0%, #eef8ff 52%, #ffffff 100%);
+      letter-spacing: 0;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 244px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 18px;
+      background: rgba(255, 255, 255, .78);
+      border-right: 1px solid rgba(217, 233, 244, .85);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #dff2ff, #ffffff);
+      box-shadow: inset 0 0 0 1px rgba(31, 88, 116, .1);
+      color: var(--green-dark);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav button {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 42px;
+      padding: 0 12px;
+      border: 0;
+      border-radius: var(--radius);
+      background: transparent;
+      color: #4f6674;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .nav button.active,
+    .nav button:hover {
+      background: var(--mint);
+      color: var(--green-dark);
+    }
+
+    .nav-icon {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .side-note {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 22px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(247, 251, 255, .9);
+      color: #536b79;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    main {
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 20px;
+    }
+
+    .hello h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.08;
+      color: var(--green-dark);
+    }
+
+    .hello p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .icon-button,
+    .primary-button,
+    .soft-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
+    }
+
+    .icon-button {
+      width: 40px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--green-dark);
+    }
+
+    .primary-button {
+      padding: 0 16px;
+      border: 0;
+      background: var(--green-dark);
+      color: white;
+      box-shadow: 0 10px 22px rgba(31, 88, 116, .16);
+    }
+
+    .soft-button {
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      background: var(--paper);
+      color: var(--green-dark);
+    }
+
+    .icon-button:hover,
+    .primary-button:hover,
+    .soft-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px rgba(38, 87, 114, .1);
+    }
+
+    .support {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 22px;
+      margin-bottom: 22px;
+      border: 1px solid rgba(181, 224, 255, .9);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(255, 255, 255, .97), rgba(231, 245, 255, .94));
+      box-shadow: var(--shadow);
+    }
+
+    .support small {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--rose-strong);
+      font-weight: 700;
+    }
+
+    .support blockquote {
+      margin: 0;
+      font-size: clamp(18px, 2.3vw, 26px);
+      line-height: 1.5;
+      color: #2d4b5d;
+    }
+
+    .support cite {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-style: normal;
+    }
+
+    .support-tools {
+      display: flex;
+      gap: 8px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .stats {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .84);
+      min-height: 116px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 8px;
+      color: var(--green-dark);
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .stat p {
+      margin: 10px 0 0;
+      color: #657b88;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .dashboard {
+      grid-template-columns: minmax(0, 1.38fr) minmax(320px, .72fr);
+      align-items: start;
+    }
+
+    .panel {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 0 12px 32px rgba(38, 87, 114, .08);
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .panel h3 {
+      margin: 0;
+      color: var(--green-dark);
+      font-size: 18px;
+    }
+
+    .tabs {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #eef8ff;
+    }
+
+    .tabs button {
+      min-height: 32px;
+      padding: 0 11px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #5b7180;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tabs button.active {
+      background: white;
+      color: var(--green-dark);
+      box-shadow: 0 2px 8px rgba(38, 87, 114, .08);
+    }
+
+    .job-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .job-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      padding: 16px;
+      border: 1px solid #dcecf6;
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    .job-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .job-title h4 {
+      margin: 0;
+      font-size: 16px;
+      color: #243846;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.rose {
+      background: #e4f4ff;
+      color: #3278a4;
+    }
+
+    .badge.gold {
+      background: #fff3d9;
+      color: #936423;
+    }
+
+    .meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .reason {
+      margin: 10px 0 0;
+      color: #536b79;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .score {
+      display: grid;
+      place-items: center;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) calc(var(--score) * 1%), #e8f2f8 0);
+      color: var(--green-dark);
+      font-weight: 800;
+    }
+
+    .score span {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .tasks {
+      display: grid;
+      gap: 12px;
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border: 1px solid #dcecf6;
+      border-radius: var(--radius);
+      background: white;
+    }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      border: 2px solid var(--green);
+      border-radius: 6px;
+      background: #f1f9ff;
+    }
+
+    .task strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+      color: #2d4b5d;
+    }
+
+    .task span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .deadline {
+      color: #2d83b9;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .materials {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 18px;
+    }
+
+    .material {
+      min-height: 150px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .9);
+    }
+
+    .material h4 {
+      margin: 0 0 10px;
+      color: var(--green-dark);
+      font-size: 16px;
+    }
+
+    .material p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .progress {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e2eff7;
+    }
+
+    .progress i {
+      display: block;
+      height: 100%;
+      width: var(--width);
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--green), var(--rose-strong));
+    }
+
+    .timeline {
+      margin-top: 18px;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .9);
+    }
+
+    .timeline h3 {
+      margin: 0 0 16px;
+      color: var(--green-dark);
+      font-size: 18px;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .step {
+      position: relative;
+      min-height: 88px;
+      padding: 13px;
+      border-radius: var(--radius);
+      background: white;
+      border: 1px solid #dcecf6;
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #2d4b5d;
+      font-size: 14px;
+    }
+
+    .step span {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .floating-note {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: min(380px, calc(100vw - 44px));
+      padding: 14px 16px;
+      border: 1px solid rgba(181, 224, 255, .95);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, .96);
+      box-shadow: var(--shadow);
+      color: #455e6d;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .flower-svg {
+      width: 140px;
+      height: 116px;
+      stroke-width: 1.8;
+    }
+
+    @media (max-width: 1080px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 16px;
+      }
+
+      .side-note {
+        position: static;
+        margin-top: 14px;
+      }
+
+      .nav {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .nav button {
+        justify-content: center;
+      }
+
+      .nav button span:last-child {
+        display: none;
+      }
+
+      .dashboard,
+      .stats,
+      .materials,
+      .steps {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 18px;
+      }
+
+      .topbar,
+      .support {
+        grid-template-columns: 1fr;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .actions,
+      .support-tools {
+        justify-content: flex-start;
+      }
+
+      .dashboard,
+      .stats,
+      .materials,
+      .steps,
+      .nav {
+        grid-template-columns: 1fr;
+      }
+
+      .job-card {
+        grid-template-columns: 1fr;
+      }
+
+      .score {
+        width: 58px;
+        height: 58px;
+      }
+
+      .score span {
+        width: 46px;
+        height: 46px;
+      }
+
+      .floating-note {
+        position: static;
+        margin: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="主导航">
+      <div class="brand">
+        <div class="brand-mark">水</div>
+        <div>
+          <h1>宝宝老婆博士求职助手</h1>
+          <p>高校优先，企业和韩国机会补充</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <button class="active" title="今日">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h10"/></svg></span>
+          <span>今日宝宝清单</span>
+        </button>
+        <button title="高校">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V9l7-4 7 4v12"/><path d="M9 21v-7h6v7"/></svg></span>
+          <span>高校花园</span>
+        </button>
+        <button title="公司">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 21V7h8v14"/><path d="M12 21V3h8v18"/><path d="M7 10h2"/><path d="M15 7h2"/><path d="M15 11h2"/><path d="M15 15h2"/></svg></span>
+          <span>公司机会</span>
+        </button>
+        <button title="韩国">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M12 21s7-5.2 7-11a7 7 0 0 0-14 0c0 5.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+          <span>韩国小路</span>
+        </button>
+        <button title="材料">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M14 3v4h4"/><path d="M9 12h6"/><path d="M9 16h6"/></svg></span>
+          <span>材料抽屉</span>
+        </button>
+        <button title="投递">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M7 11l3 3 7-7"/><path d="M5 4h14v16H5z"/></svg></span>
+          <span>投递看板</span>
+        </button>
+      </nav>
+
+      <div class="side-note">
+        宝宝老婆负责发光，我负责整理机会。今天只要前进一步，就已经很好。
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div class="hello">
+          <h2>早上好，宝宝老婆</h2>
+          <p>今天适合处理 4 个申请，别着急，一个一个来。</p>
+        </div>
+        <div class="actions">
+          <button class="soft-button" title="上传简历">
+            <svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>
+            上传 CV
+          </button>
+          <button class="primary-button" title="准备材料包">
+            <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+            一键准备
+          </button>
+        </div>
+      </header>
+
+      <section class="support" aria-label="老公今日支持">
+        <div>
+          <small>老公今日支持</small>
+          <blockquote id="dailyMessage">宝宝老婆，今天也慢慢来。你已经走了很远，接下来我陪你一件一件完成。</blockquote>
+          <cite>— 老公</cite>
+        </div>
+        <div class="support-tools">
+          <button class="icon-button" id="favoriteButton" title="收藏这句话">
+            <svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg>
+          </button>
+          <button class="icon-button" id="shuffleButton" title="换一句">
+            <svg viewBox="0 0 24 24"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="grid stats" aria-label="今日概览">
+        <article class="stat">
+          <span>中国高校推荐</span>
+          <strong>12</strong>
+          <p>3 个适合优先准备完整材料包。</p>
+        </article>
+        <article class="stat">
+          <span>中国公司机会</span>
+          <strong>6</strong>
+          <p>算法、研发和高校合作研究院为主。</p>
+        </article>
+        <article class="stat">
+          <span>韩国机会</span>
+          <strong>4</strong>
+          <p>2 个支持英文申请，1 个需要韩语。</p>
+        </article>
+        <article class="stat">
+          <span>即将截止</span>
+          <strong>2</strong>
+          <p>最急的岗位还有 3 天截止。</p>
+        </article>
+      </section>
+
+      <section class="grid dashboard">
+        <div class="panel">
+          <div class="panel-header">
+            <h3>最值得看的机会</h3>
+            <div class="tabs" role="tablist" aria-label="岗位类型">
+              <button class="active">高校</button>
+              <button>公司</button>
+              <button>韩国</button>
+            </div>
+          </div>
+
+          <div class="job-list">
+            <article class="job-card">
+              <div>
+                <div class="job-title">
+                  <h4>青年教师 / 特聘研究员</h4>
+                  <span class="badge">中国高校</span>
+                  <span class="badge rose">海外博士友好</span>
+                </div>
+                <div class="meta">
+                  <span>南京某双一流高校</span>
+                  <span>截止：7 月 9 日</span>
+                  <span>材料：CV、研究计划、论文清单</span>
+                </div>
+                <p class="reason">方向匹配度高，明确欢迎海外博士。建议今天先生成中文简历和 3 年科研计划。</p>
+              </div>
+              <div class="score" style="--score: 92"><span>92</span></div>
+            </article>
+
+            <article class="job-card">
+              <div>
+                <div class="job-title">
+                  <h4>博士后 / 师资博士后</h4>
+                  <span class="badge">中国高校</span>
+                  <span class="badge gold">待遇清晰</span>
+                </div>
+                <div class="meta">
+                  <span>杭州某研究院</span>
+                  <span>长期招聘</span>
+                  <span>材料：导师邮件、自荐信、代表作</span>
+                </div>
+                <p class="reason">适合作为稳妥选项。宝宝老婆可以先联系 PI，再决定是否正式投递。</p>
+              </div>
+              <div class="score" style="--score: 88"><span>88</span></div>
+            </article>
+
+            <article class="job-card">
+              <div>
+                <div class="job-title">
+                  <h4>企业中央研究院研发科学家</h4>
+                  <span class="badge">中国公司</span>
+                </div>
+                <div class="meta">
+                  <span>深圳</span>
+                  <span>社招</span>
+                  <span>材料：1 页企业简历、项目版介绍</span>
+                </div>
+                <p class="reason">看重论文和工程落地，可以把博士项目改写成产品和指标语言。</p>
+              </div>
+              <div class="score" style="--score: 84"><span>84</span></div>
+            </article>
+          </div>
+        </div>
+
+        <aside class="panel">
+          <div class="panel-header">
+            <h3>等宝宝老婆看一眼</h3>
+            <button class="icon-button" title="添加任务">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            </button>
+          </div>
+          <div class="tasks">
+            <div class="task">
+              <span class="check"></span>
+              <div>
+                <strong>确认南京高校中文 CV</strong>
+                <span>我已经把论文和研究方向放前面了</span>
+              </div>
+              <span class="deadline">今天</span>
+            </div>
+            <div class="task">
+              <span class="check"></span>
+              <div>
+                <strong>补一段未来科研计划</strong>
+                <span>需要 300 字中文版本</span>
+              </div>
+              <span class="deadline">明天</span>
+            </div>
+            <div class="task">
+              <span class="check"></span>
+              <div>
+                <strong>给韩国 PI 的英文邮件</strong>
+                <span>语气已经调成礼貌简洁</span>
+              </div>
+              <span class="deadline">周四</span>
+            </div>
+            <div class="task">
+              <span class="check"></span>
+              <div>
+                <strong>企业简历压缩到 1 页</strong>
+                <span>突出技能和项目成果</span>
+              </div>
+              <span class="deadline">本周</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="grid materials" aria-label="材料中心">
+        <article class="material">
+          <h4>高校中文材料包</h4>
+          <p>中文简历、论文清单、研究计划、自荐信，适合教职和博士后岗位。</p>
+          <div class="progress"><i style="--width: 76%"></i></div>
+        </article>
+        <article class="material">
+          <h4>企业研发简历</h4>
+          <p>把博士经历转成项目、技能、指标和落地价值，适合研发科学家岗位。</p>
+          <div class="progress"><i style="--width: 54%"></i></div>
+        </article>
+        <article class="material">
+          <h4>韩国申请邮件</h4>
+          <p>英文 cover letter、PI 联系邮件、韩文短介绍和签证说明。</p>
+          <div class="progress"><i style="--width: 43%"></i></div>
+        </article>
+      </section>
+
+      <section class="timeline" aria-label="投递进度">
+        <h3>本周投递节奏</h3>
+        <div class="steps">
+          <div class="step">
+            <strong>周一</strong>
+            <span>筛岗位，挑出 5 个最值得投的机会。</span>
+          </div>
+          <div class="step">
+            <strong>周二</strong>
+            <span>完成中国高校中文材料包第一版。</span>
+          </div>
+          <div class="step">
+            <strong>周三</strong>
+            <span>联系 2 位 PI，投递 1 个快截止岗位。</span>
+          </div>
+          <div class="step">
+            <strong>周四</strong>
+            <span>整理企业研发简历，准备项目版自我介绍。</span>
+          </div>
+          <div class="step">
+            <strong>周五</strong>
+            <span>复盘回复情况，把下周清单排好。</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="floating-note" role="status">
+    <svg viewBox="0 0 24 24"><path d="M12 21C7 17 4 14.4 4 10a4 4 0 0 1 7-2.7A4 4 0 0 1 18 10c0 4.4-3 7-6 11Z"/></svg>
+    <span>今天不是要解决全部未来，只是帮宝宝老婆把下一步变清楚。</span>
+  </div>
+
+  <script>
+    const messages = [
+      "宝宝老婆，今天也慢慢来。你已经走了很远，接下来我陪你一件一件完成。",
+      "不管今天有没有好消息，你都不是一个人在面对这些。我一直站在你这边。",
+      "今天先处理最重要的一件事就好。其他的，我们明天再一起看。",
+      "你已经很优秀了，求职只是让合适的地方看见你。",
+      "宝宝老婆负责勇敢，我负责帮你把路照亮一点。",
+      "如果今天觉得累，就先休息一下。机会很多，但你只有一个，要先照顾好你。",
+      "每一次投递都不是被评价，而是在寻找真正适合你的地方。",
+      "今天也相信你。不是因为结果已经确定，而是因为我知道你有多认真。",
+      "宝宝老婆，不用急着证明自己。你本来就值得很好的未来。",
+      "今天我们只前进一步。小小一步也算数。"
+    ];
+
+    const dailyMessage = document.querySelector("#dailyMessage");
+    const shuffleButton = document.querySelector("#shuffleButton");
+    const favoriteButton = document.querySelector("#favoriteButton");
+    const dayIndex = Math.floor(Date.now() / 86400000) % messages.length;
+    let messageIndex = dayIndex;
+
+    function showMessage(index) {
+      dailyMessage.textContent = messages[index];
+    }
+
+    showMessage(messageIndex);
+
+    shuffleButton.addEventListener("click", () => {
+      messageIndex = (messageIndex + 1) % messages.length;
+      showMessage(messageIndex);
+    });
+
+    favoriteButton.addEventListener("click", () => {
+      favoriteButton.style.background = "#e4f4ff";
+      favoriteButton.style.color = "#3278a4";
+      favoriteButton.title = "已收藏";
+    });
+  </script>
+</body>
+</html>
