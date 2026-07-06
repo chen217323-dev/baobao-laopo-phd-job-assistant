@@ -8,6 +8,7 @@ if (Test-Path $zip) {
 
 $items = @(
   ".github",
+  "api",
   "outputs",
   "work",
   "README.md",

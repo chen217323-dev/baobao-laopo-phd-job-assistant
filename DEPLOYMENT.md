@@ -43,6 +43,23 @@ cron: "0 23 * * *"
 - 简历页查看该岗位适合准备哪类材料。
 - 正式投递前打开原文链接核对。
 
+## 接入 OpenAI
+
+在 Vercel 项目里打开：
+
+```text
+Settings -> Environment Variables
+```
+
+添加：
+
+```text
+OPENAI_API_KEY=你的 OpenAI API Key
+OPENAI_MODEL=gpt-5.2-mini
+```
+
+保存后重新部署。网页里的“AI分析”按钮会调用 `/api/analyze-job`，不会把 Key 暴露到浏览器。
+
 ## 本地运行
 
 ```powershell

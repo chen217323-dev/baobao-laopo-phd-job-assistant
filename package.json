@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "crawl": "node work/crawler/crawl-jobs.mjs",
-    "serve": "node work/serve-outputs.mjs"
+    "serve": "node work/serve-outputs.mjs",
+    "check-api": "node --check api/analyze-job.mjs"
   }
 }

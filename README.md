@@ -9,6 +9,7 @@
 - 每条岗位保留条件、待遇、材料、联系方式和原文摘要
 - 展示学校/单位正在招聘的专业方向和需求学科
 - 提供可填写并保存的简历库页面：基本信息、博士学校、研究方向、论文、项目、技能、目标岗位
+- 接入 OpenAI API 后，可基于简历和岗位详情生成匹配度、优势、风险和材料建议
 - 手机端展示“老公今日支持”和今日流日小窗口
 - 可部署到 Vercel，作为独立网页 App 使用
 
@@ -50,6 +51,17 @@ http://电脑局域网IP:8787/
 真实投递前仍建议打开原文链接核对截止日期、材料要求和联系方式。
 
 简历库内容保存在当前手机浏览器的本地存储里，不会上传到 GitHub。
+
+## OpenAI API
+
+Vercel 里需要配置环境变量：
+
+```text
+OPENAI_API_KEY=你的 OpenAI API Key
+OPENAI_MODEL=gpt-5.2-mini
+```
+
+前端不会暴露 API Key。手机页面会调用 `/api/analyze-job`，由 Vercel Serverless Function 访问 OpenAI Responses API。
 
 ## 手机使用方式
 

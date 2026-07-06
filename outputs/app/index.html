@@ -282,7 +282,7 @@
       font-size: 12px;
       font-weight: 700;
     }
-    .job-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+    .job-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .job-actions button { min-height: 40px; padding: 0 8px; }
 
     .status-card {
@@ -450,7 +450,7 @@
     .kv { display: grid; grid-template-columns: 88px minmax(0, 1fr); gap: 8px; margin-top: 7px; font-size: 13px; }
     .kv span:first-child { color: var(--muted); }
     .kv span:last-child { color: #2d4b5d; }
-    .drawer-actions { position: sticky; bottom: -14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 12px; background: #fff; }
+    .drawer-actions { position: sticky; bottom: -14px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding-top: 12px; background: #fff; }
     .drawer-actions button { min-height: 42px; }
     .raw-text {
       max-height: 180px;
@@ -459,6 +459,39 @@
       color: #536b79;
       font-size: 12px;
       line-height: 1.55;
+    }
+    .ai-result {
+      display: grid;
+      gap: 10px;
+      color: #536b79;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .ai-score {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--blue-100);
+      color: var(--blue-700);
+      font-size: 20px;
+      font-weight: 900;
+    }
+    .ai-columns {
+      display: grid;
+      gap: 8px;
+    }
+    .ai-columns strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #2d4b5d;
+    }
+    .ai-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
     }
 
     .toast {
@@ -661,6 +694,7 @@
       <div class="detail-grid" id="detailBody"></div>
       <div class="drawer-actions">
         <button class="ghost" id="detailSave">收藏岗位</button>
+        <button class="ghost" id="detailAi">AI分析</button>
         <button class="primary" id="detailPrepare">准备投递</button>
       </div>
     </div>
@@ -945,6 +979,7 @@
     let activeFilter = "all";
     let activeJobId = null;
     const resumeStorageKey = "baobao-laopo-resume-profile";
+    const aiStorageKey = "baobao-laopo-ai-analysis";
 
     function today() {
       const formatter = new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "short" });
@@ -1010,6 +1045,92 @@
       return Object.fromEntries(new FormData(resumeForm).entries());
     }
 
+    function getAiCache() {
+      try {
+        return JSON.parse(localStorage.getItem(aiStorageKey) || "{}");
+      } catch {
+        return {};
+      }
+    }
+
+    function setAiCache(jobId, result) {
+      const cache = getAiCache();
+      cache[jobId] = { ...result, savedAt: new Date().toISOString() };
+      localStorage.setItem(aiStorageKey, JSON.stringify(cache));
+    }
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
+
+    function aiList(items, fallback) {
+      const safeItems = Array.isArray(items) && items.length ? items : [fallback];
+      return `<ul>${safeItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    }
+
+    function renderAiAnalysis(result) {
+      if (!result) {
+        return `
+          <div class="ai-result">
+            <p>点底部“AI分析”，会结合她填写的简历，给出匹配度、优势、风险、材料建议和下一步。</p>
+            <p class="ai-note">简历只保存在这台手机里；只有点 AI 分析时，当前岗位和简历内容才会发送给 OpenAI。</p>
+          </div>
+        `;
+      }
+      return `
+        <div class="ai-result">
+          <div><span class="ai-score">${Number(result.matchScore || 0)}</span></div>
+          <p>${escapeHtml(result.summary || "AI 已完成分析，可以按下面建议准备材料。")}</p>
+          <div class="ai-columns">
+            <div><strong>适合她的地方</strong>${aiList(result.strengths, "需要结合简历进一步判断优势。")}</div>
+            <div><strong>要注意的风险</strong>${aiList(result.risks, "公告条件需要再核对原文。")}</div>
+            <div><strong>建议准备材料</strong>${aiList(result.recommendedMaterials, "CV、研究计划、论文清单、求职信。")}</div>
+            <div><strong>简历重点怎么写</strong>${aiList(result.resumeFocus, "突出博士研究方向、论文、项目和目标岗位匹配点。")}</div>
+            <div><strong>下一步</strong>${aiList(result.nextSteps, "打开原文核对条件，再准备投递材料。")}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateAiBox(result) {
+      const box = document.querySelector("#aiAnalysisBox");
+      if (!box) return;
+      box.innerHTML = `<h3>AI 智能分析</h3>${renderAiAnalysis(result)}`;
+    }
+
+    async function analyzeJob(id) {
+      const job = jobs.find((item) => item.id === id);
+      if (!job) return;
+      updateAiBox(null);
+      showToast("AI 正在帮宝宝老婆分析这个岗位。");
+      try {
+        const response = await fetch("/api/analyze-job", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({ job, resume: getResumeData() })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "AI 分析失败。");
+        setAiCache(job.id, result);
+        updateAiBox(result);
+        showToast("AI 分析好了。");
+      } catch (error) {
+        updateAiBox({
+          matchScore: 0,
+          summary: error.message || "AI 暂时没有分析成功，请稍后再试。",
+          risks: ["请确认 Vercel 已经配置 OPENAI_API_KEY，并重新部署。"],
+          nextSteps: ["配置完成后，再回到岗位详情里点击 AI分析。"]
+        });
+        showToast("AI 分析暂时失败，需要检查接口配置。");
+      }
+    }
+
     function setResumeData(data) {
       Object.entries(data || {}).forEach(([key, value]) => {
         const field = resumeForm.elements[key];
@@ -1067,6 +1188,7 @@
           <div class="job-actions">
             <button class="ghost" data-action="detail" data-id="${job.id}">看详情</button>
             <button class="ghost" data-action="save" data-id="${job.id}">收藏</button>
+            <button class="ghost" data-action="ai" data-id="${job.id}">AI分析</button>
             <button class="primary" data-action="prepare" data-id="${job.id}">准备</button>
           </div>
         </article>
@@ -1080,6 +1202,7 @@
       const job = jobs.find((item) => item.id === id);
       if (!job) return;
       activeJobId = id;
+      const cachedAi = getAiCache()[job.id];
       detailTitle.textContent = job.title;
       detailSub.textContent = `${job.org} · ${job.department} · ${job.deadlineText}`;
       detailBody.innerHTML = `
@@ -1097,6 +1220,7 @@
         <section class="detail-box"><h3>岗位条件</h3>${list(safeList(job.requirements, "公告正文已保存，具体条件请查看原文详情。"))}</section>
         <section class="detail-box"><h3>待遇支持</h3>${list(safeList(job.benefits, "公告未解析出明确待遇，需查看原文确认。"))}</section>
         <section class="detail-box"><h3>申请材料</h3>${list(safeList(job.materials, "公告未解析出完整材料清单，需查看原文确认。"))}</section>
+        <section class="detail-box" id="aiAnalysisBox"><h3>AI 智能分析</h3>${renderAiAnalysis(cachedAi)}</section>
         <section class="detail-box">
           <h3>联系方式和投递方式</h3>
           <div class="kv"><span>联系人</span><span>${job.contact.name}</span></div>
@@ -1148,6 +1272,10 @@
       if (!button) return;
       if (button.dataset.action === "detail") openDetail(button.dataset.id);
       if (button.dataset.action === "save") showToast("已放进宝宝老婆的备选清单。");
+      if (button.dataset.action === "ai") {
+        openDetail(button.dataset.id);
+        analyzeJob(button.dataset.id);
+      }
       if (button.dataset.action === "prepare") {
         const pending = document.querySelector("#pendingCount");
         pending.textContent = Number(pending.textContent) + 1;
@@ -1157,6 +1285,7 @@
     document.querySelector("#closeDetail").addEventListener("click", closeDetail);
     drawer.addEventListener("click", (event) => { if (event.target === drawer) closeDetail(); });
     document.querySelector("#detailSave").addEventListener("click", () => showToast("这个岗位已经收藏好啦。"));
+    document.querySelector("#detailAi").addEventListener("click", () => analyzeJob(activeJobId));
     document.querySelector("#detailPrepare").addEventListener("click", () => {
       const pending = document.querySelector("#pendingCount");
       pending.textContent = Number(pending.textContent) + 1;
