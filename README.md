@@ -58,7 +58,7 @@ Vercel 里需要配置环境变量：
 
 ```text
 OPENAI_API_KEY=你的 OpenAI API Key
-OPENAI_MODEL=gpt-5.2-mini
+OPENAI_MODEL=gpt-5.4-mini
 ```
 
 前端不会暴露 API Key。手机页面会调用 `/api/analyze-job`，由 Vercel Serverless Function 访问 OpenAI Responses API。

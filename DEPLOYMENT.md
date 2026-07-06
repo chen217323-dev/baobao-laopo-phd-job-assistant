@@ -55,7 +55,7 @@ Settings -> Environment Variables
 
 ```text
 OPENAI_API_KEY=你的 OpenAI API Key
-OPENAI_MODEL=gpt-5.2-mini
+OPENAI_MODEL=gpt-5.4-mini
 ```
 
 保存后重新部署。网页里的“AI分析”按钮会调用 `/api/analyze-job`，不会把 Key 暴露到浏览器。

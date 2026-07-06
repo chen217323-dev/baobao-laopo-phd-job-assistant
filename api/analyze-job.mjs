@@ -1,11 +1,47 @@
+const DEFAULT_MODEL = "gpt-5.4-mini";
+
+function modelName() {
+  return process.env.OPENAI_MODEL || DEFAULT_MODEL;
+}
+
+function pickText(data) {
+  if (data.output_text) return data.output_text;
+  const content = data.output?.flatMap((item) => item.content || []) || [];
+  return content.find((item) => item.type === "output_text")?.text || "{}";
+}
+
+function safeJson(text) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    return {
+      matchScore: 0,
+      summary: "AI returned text, but the app could not parse it as JSON.",
+      risks: ["Please try again, or check the OpenAI model setting in Vercel."],
+      nextSteps: ["Set OPENAI_MODEL to gpt-5.4-mini and redeploy."]
+    };
+  }
+}
+
 export default async function handler(request, response) {
+  const hasKey = Boolean(process.env.OPENAI_API_KEY);
+
+  if (request.method === "GET") {
+    response.status(200).json({
+      ok: true,
+      apiKeyConfigured: hasKey,
+      model: modelName(),
+      message: "POST a job and resume payload to run AI analysis."
+    });
+    return;
+  }
+
   if (request.method !== "POST") {
     response.status(405).json({ error: "Method not allowed" });
     return;
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  if (!hasKey) {
     response.status(500).json({ error: "OPENAI_API_KEY is not configured in Vercel." });
     return;
   }
@@ -17,7 +53,7 @@ export default async function handler(request, response) {
       return;
     }
 
-    const payload = {
+    const jobPayload = {
       title: job.title,
       org: job.org,
       department: job.department,
@@ -31,21 +67,40 @@ export default async function handler(request, response) {
       rawText: String(job.rawText || "").slice(0, 3500)
     };
 
+    const prompt = [
+      "Analyze this PhD job opportunity for a Chinese-speaking PhD graduate.",
+      "Return only valid JSON. Write all user-facing string values in Simplified Chinese.",
+      "Required JSON keys:",
+      "matchScore: number from 0 to 100",
+      "summary: one sentence",
+      "strengths: array of strings",
+      "risks: array of strings",
+      "recommendedMaterials: array of strings",
+      "resumeFocus: array of strings",
+      "nextSteps: array of strings",
+      "",
+      "Resume profile:",
+      JSON.stringify(resume || {}, null, 2),
+      "",
+      "Job post:",
+      JSON.stringify(jobPayload, null, 2)
+    ].join("\n");
+
     const openaiResponse = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "authorization": `Bearer ${apiKey}`
+        "authorization": `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: process.env.OPENAI_MODEL || "gpt-5.2-mini",
+        model: modelName(),
         input: [
           {
             role: "system",
             content: [
               {
                 type: "input_text",
-                text: "You are a careful PhD job-search assistant. Analyze job posts for a Chinese-speaking PhD graduate. Be practical, warm, and honest. Return only valid JSON."
+                text: "You are a careful, practical PhD job-search assistant. Return only valid JSON."
               }
             ]
           },
@@ -54,28 +109,12 @@ export default async function handler(request, response) {
             content: [
               {
                 type: "input_text",
-                text: `请结合简历和岗位信息，判断这个岗位是否适合申请。请只返回 JSON，不要返回 Markdown。
-
-JSON 格式必须是：
-{
-  "matchScore": 0-100,
-  "summary": "一句话总结是否值得投",
-  "strengths": ["优势1", "优势2"],
-  "risks": ["风险1", "风险2"],
-  "recommendedMaterials": ["材料1", "材料2"],
-  "resumeFocus": ["简历应该强调的重点"],
-  "nextSteps": ["下一步1", "下一步2"]
-}
-
-简历信息：
-${JSON.stringify(resume || {}, null, 2)}
-
-岗位信息：
-${JSON.stringify(payload, null, 2)}`
+                text: prompt
               }
             ]
           }
         ],
+        max_output_tokens: 1200,
         text: {
           format: {
             type: "json_object"
@@ -86,15 +125,14 @@ ${JSON.stringify(payload, null, 2)}`
 
     const data = await openaiResponse.json();
     if (!openaiResponse.ok) {
-      response.status(openaiResponse.status).json({ error: data.error?.message || "OpenAI request failed." });
+      response.status(openaiResponse.status).json({
+        error: data.error?.message || "OpenAI request failed.",
+        model: modelName()
+      });
       return;
     }
 
-    const text = data.output_text
-      || data.output?.flatMap((item) => item.content || []).find((item) => item.type === "output_text")?.text
-      || "{}";
-
-    response.status(200).json(JSON.parse(text));
+    response.status(200).json(safeJson(pickText(data)));
   } catch (error) {
     response.status(500).json({ error: error.message || "Unexpected server error." });
   }
