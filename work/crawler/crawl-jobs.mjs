@@ -131,6 +131,26 @@ function sliceAround(text, keywords, max = 360) {
   return text.slice(index, index + max);
 }
 
+function extractMajors(text) {
+  const found = new Set();
+  const blocks = [
+    sliceAround(text, ["需求学科", "招聘学科", "专业要求", "专业方向", "研究方向", "学科方向"], 260),
+    sliceAround(text, ["人工智能", "计算机", "数据科学", "机器学习"], 220)
+  ].filter(Boolean);
+  const dictionary = [
+    "人工智能", "计算机科学与技术", "软件工程", "电子信息", "信息与通信工程", "控制科学与工程",
+    "数据科学", "机器学习", "大模型", "自动化", "数学", "统计学", "生物学", "心理学",
+    "材料科学与工程", "机械工程", "电气工程", "化学", "物理学", "医学", "临床医学",
+    "金融学", "经济学", "管理科学与工程", "教育学", "马克思主义理论", "外国语言文学"
+  ];
+  for (const block of blocks) {
+    for (const item of dictionary) {
+      if (block.includes(item)) found.add(item);
+    }
+  }
+  return [...found].slice(0, 8);
+}
+
 function makeJob({ category, source, link, html }) {
   const text = pageText(html);
   let title = extractTitle(html, link.title);
@@ -159,6 +179,7 @@ function makeJob({ category, source, link, html }) {
   const materials = [
     sliceAround(text, ["申请材料", "应聘材料", "提交材料", "Required documents"], 360)
   ].filter(Boolean);
+  const majors = extractMajors(text);
 
   return {
     id: `job-${Buffer.from(link.url).toString("base64url").slice(0, 18)}`,
@@ -176,6 +197,7 @@ function makeJob({ category, source, link, html }) {
     urgent: /[0-9]{4}[年.-][0-9]{1,2}[月.-][0-9]{1,2}/.test(deadline),
     reason: "真实网页抓取结果。请打开原文核对最终条件、待遇和截止日期。",
     requirements: requirements.length ? requirements : ["公告正文已保存，具体条件请查看原文详情。"],
+    majors: majors.length ? majors : ["公告未明确列出专业，需查看原文确认。"],
     benefits: benefits.length ? benefits : ["公告未解析出明确待遇，需查看原文确认。"],
     materials: materials.length ? materials : ["公告未解析出完整材料清单，需查看原文确认。"],
     contact: {

@@ -265,6 +265,23 @@
       font-size: 12px;
       line-height: 1.45;
     }
+    .major-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 0 0 12px;
+    }
+    .major-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #eef8ff;
+      color: #1f5874;
+      font-size: 12px;
+      font-weight: 700;
+    }
     .job-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
     .job-actions button { min-height: 40px; padding: 0 8px; }
 
@@ -282,13 +299,35 @@
     .task span { color: var(--muted); font-size: 12px; }
     .deadline { color: var(--blue-500); font-size: 12px; font-weight: 800; white-space: nowrap; }
 
+    .resume-card {
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.92);
+    }
+    .resume-card h3 {
+      margin: 0 0 8px;
+      color: #2d4b5d;
+      font-size: 15px;
+    }
+    .resume-card p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .resume-grid {
+      display: grid;
+      gap: 10px;
+    }
+
     .bottom-nav {
       position: fixed;
       left: 50%;
       bottom: 0;
       z-index: 10;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 4px;
       width: min(100%, 520px);
       padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
@@ -443,6 +482,39 @@
       </div>
     </section>
 
+    <section class="section" id="resume">
+      <div class="section-head"><h2>宝宝老婆简历库</h2><span>按岗位自动准备</span></div>
+      <div class="resume-grid">
+        <article class="resume-card">
+          <h3>高校中文 CV</h3>
+          <p>适合教职、博士后、特聘研究员。重点放博士方向、论文、项目、教学经历和未来研究计划。</p>
+          <div class="major-list">
+            <span class="major-tag">中文简历</span>
+            <span class="major-tag">论文清单</span>
+            <span class="major-tag">研究计划</span>
+          </div>
+        </article>
+        <article class="resume-card">
+          <h3>企业研发 1 页简历</h3>
+          <p>适合算法、数据科学、AI Lab、企业研究院。重点放技能、项目成果、代码/论文链接和可落地能力。</p>
+          <div class="major-list">
+            <span class="major-tag">项目经历</span>
+            <span class="major-tag">技术关键词</span>
+            <span class="major-tag">成果指标</span>
+          </div>
+        </article>
+        <article class="resume-card">
+          <h3>韩国机会材料</h3>
+          <p>适合 Postdoc、Research Professor、韩国企业 R&D。重点放英文 CV、research statement 和 PI 联系邮件。</p>
+          <div class="major-list">
+            <span class="major-tag">English CV</span>
+            <span class="major-tag">Cover Email</span>
+            <span class="major-tag">Reference</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="section" id="apply">
       <div class="section-head"><h2>今天的小目标</h2><span>不用贪多</span></div>
       <div class="status-card">
@@ -456,6 +528,7 @@
     <a class="active" href="#home">今日</a>
     <a href="#jobs">岗位</a>
     <a href="#materials">材料</a>
+    <a href="#resume">简历</a>
     <a href="#apply">投递</a>
   </nav>
 
@@ -794,6 +867,23 @@
       return `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>`;
     }
 
+    function safeList(items, fallback) {
+      return Array.isArray(items) && items.length ? items : [fallback];
+    }
+
+    function inferMajors(job) {
+      if (Array.isArray(job.majors) && job.majors.length) return job.majors;
+      const text = `${job.title || ""} ${(job.requirements || []).join(" ")} ${job.rawText || ""}`;
+      const majors = ["人工智能", "计算机科学与技术", "软件工程", "电子信息", "数据科学", "机器学习", "大模型", "数学", "统计学", "生物学", "心理学", "材料科学与工程", "机械工程", "医学", "金融学"];
+      return majors.filter((major) => text.includes(major)).slice(0, 6);
+    }
+
+    function majorTags(job) {
+      const majors = inferMajors(job);
+      if (!majors.length) return '<span class="major-tag">专业需看原文</span>';
+      return majors.map((major) => `<span class="major-tag">${major}</span>`).join("");
+    }
+
     function renderJobs() {
       const visible = seededJobs().filter((job) => {
         if (activeFilter === "all") return true;
@@ -817,9 +907,10 @@
             <div class="score" style="--score: ${job.score}"><span>${job.score}</span></div>
           </div>
           <p class="reason">${job.reason}</p>
+          <div class="major-list">${majorTags(job)}</div>
           <div class="detail-preview">
-            <span>条件：${job.requirements[0]}</span>
-            <span>材料：${job.materials.slice(0, 3).join("、")} 等</span>
+            <span>条件：${safeList(job.requirements, "公告正文已保存，具体条件请查看原文详情。")[0]}</span>
+            <span>材料：${safeList(job.materials, "公告未解析出完整材料清单，需查看原文确认。").slice(0, 3).join("、")} 等</span>
           </div>
           <div class="job-actions">
             <button class="ghost" data-action="detail" data-id="${job.id}">看详情</button>
@@ -850,9 +941,10 @@
           <div class="kv"><span>来源</span><span>${job.source}</span></div>
         </section>
         <section class="detail-box"><h3>为什么值得看</h3><p>${job.reason}</p></section>
-        <section class="detail-box"><h3>岗位条件</h3>${list(job.requirements)}</section>
-        <section class="detail-box"><h3>待遇支持</h3>${list(job.benefits)}</section>
-        <section class="detail-box"><h3>申请材料</h3>${list(job.materials)}</section>
+        <section class="detail-box"><h3>招聘专业 / 需求学科</h3><div class="major-list">${majorTags(job)}</div></section>
+        <section class="detail-box"><h3>岗位条件</h3>${list(safeList(job.requirements, "公告正文已保存，具体条件请查看原文详情。"))}</section>
+        <section class="detail-box"><h3>待遇支持</h3>${list(safeList(job.benefits, "公告未解析出明确待遇，需查看原文确认。"))}</section>
+        <section class="detail-box"><h3>申请材料</h3>${list(safeList(job.materials, "公告未解析出完整材料清单，需查看原文确认。"))}</section>
         <section class="detail-box">
           <h3>联系方式和投递方式</h3>
           <div class="kv"><span>联系人</span><span>${job.contact.name}</span></div>
