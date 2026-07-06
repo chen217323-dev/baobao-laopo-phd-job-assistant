@@ -320,6 +320,69 @@
       display: grid;
       gap: 10px;
     }
+    .resume-form {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.94);
+    }
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+    .field label {
+      color: #2d4b5d;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+    .field textarea {
+      min-height: 86px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .resume-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .resume-actions button {
+      min-height: 42px;
+    }
+    .resume-summary {
+      display: grid;
+      gap: 6px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #f7fbff;
+      color: #536b79;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .resume-summary strong {
+      color: #2d4b5d;
+    }
 
     .bottom-nav {
       position: fixed;
@@ -483,7 +546,61 @@
     </section>
 
     <section class="section" id="resume">
-      <div class="section-head"><h2>宝宝老婆简历库</h2><span>按岗位自动准备</span></div>
+      <div class="section-head"><h2>宝宝老婆简历库</h2><span id="resumeSavedText">本机保存</span></div>
+      <form class="resume-form" id="resumeForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="resumeName">姓名</label>
+            <input id="resumeName" name="name" placeholder="宝宝老婆的名字" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="resumeDegree">学历</label>
+            <select id="resumeDegree" name="degree">
+              <option value="博士">博士</option>
+              <option value="博士后">博士后</option>
+              <option value="硕士">硕士</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="resumeSchool">博士学校 / 研究机构</label>
+          <input id="resumeSchool" name="school" placeholder="例如：韩国某大学 / Seoul National University" />
+        </div>
+        <div class="field">
+          <label for="resumeMajor">专业方向 / 研究关键词</label>
+          <textarea id="resumeMajor" name="major" placeholder="例如：人工智能、数据科学、机器学习、心理学、材料等"></textarea>
+        </div>
+        <div class="field">
+          <label for="resumePapers">论文 / 代表成果</label>
+          <textarea id="resumePapers" name="papers" placeholder="论文、专利、项目成果、获奖等，一行一个也可以"></textarea>
+        </div>
+        <div class="field">
+          <label for="resumeProjects">项目经历</label>
+          <textarea id="resumeProjects" name="projects" placeholder="博士课题、合作项目、企业项目、实验平台等"></textarea>
+        </div>
+        <div class="field">
+          <label for="resumeSkills">技能</label>
+          <textarea id="resumeSkills" name="skills" placeholder="Python、R、MATLAB、实验方法、模型、软件、仪器等"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="resumeTarget">目标岗位</label>
+            <input id="resumeTarget" name="target" placeholder="教职 / 博后 / 研发科学家" />
+          </div>
+          <div class="field">
+            <label for="resumeCities">目标城市</label>
+            <input id="resumeCities" name="cities" placeholder="北京、上海、南京、韩国等" />
+          </div>
+        </div>
+        <div class="resume-actions">
+          <button class="primary" type="submit">保存简历</button>
+          <button class="ghost" type="button" id="clearResume">清空</button>
+        </div>
+        <div class="resume-summary" id="resumeSummary">
+          <strong>保存后，小助手会在这台手机上记住宝宝老婆的简历信息。</strong>
+          <span>之后可以用这些内容辅助判断岗位、准备材料。</span>
+        </div>
+      </form>
       <div class="resume-grid">
         <article class="resume-card">
           <h3>高校中文 CV</h3>
@@ -819,10 +936,15 @@
     const dataNote = document.querySelector("#dataNote");
     const dayPillar = document.querySelector("#dayPillar");
     const fortuneHint = document.querySelector("#fortuneHint");
+    const resumeForm = document.querySelector("#resumeForm");
+    const resumeSavedText = document.querySelector("#resumeSavedText");
+    const resumeSummary = document.querySelector("#resumeSummary");
+    const clearResume = document.querySelector("#clearResume");
     const dayNumber = Math.floor(Date.now() / 86400000);
     let messageIndex = dayNumber % messages.length;
     let activeFilter = "all";
     let activeJobId = null;
+    const resumeStorageKey = "baobao-laopo-resume-profile";
 
     function today() {
       const formatter = new Intl.DateTimeFormat("zh-CN", { month: "long", day: "numeric", weekday: "short" });
@@ -882,6 +1004,36 @@
       const majors = inferMajors(job);
       if (!majors.length) return '<span class="major-tag">专业需看原文</span>';
       return majors.map((major) => `<span class="major-tag">${major}</span>`).join("");
+    }
+
+    function getResumeData() {
+      return Object.fromEntries(new FormData(resumeForm).entries());
+    }
+
+    function setResumeData(data) {
+      Object.entries(data || {}).forEach(([key, value]) => {
+        const field = resumeForm.elements[key];
+        if (field) field.value = value;
+      });
+      renderResumeSummary();
+    }
+
+    function renderResumeSummary() {
+      const data = getResumeData();
+      const filled = Object.values(data).filter((value) => String(value || "").trim()).length;
+      const keywords = [data.major, data.skills, data.target].filter(Boolean).join("；");
+      resumeSavedText.textContent = filled ? `已填写 ${filled} 项` : "本机保存";
+      resumeSummary.innerHTML = filled
+        ? `<strong>${data.name || "宝宝老婆"}的简历信息已在这台手机保存。</strong><span>${keywords || "可以继续补充研究方向、技能和目标岗位。"}</span>`
+        : `<strong>保存后，小助手会在这台手机上记住宝宝老婆的简历信息。</strong><span>之后可以用这些内容辅助判断岗位、准备材料。</span>`;
+    }
+
+    function loadResume() {
+      try {
+        setResumeData(JSON.parse(localStorage.getItem(resumeStorageKey) || "{}"));
+      } catch {
+        setResumeData({});
+      }
     }
 
     function renderJobs() {
@@ -1010,6 +1162,20 @@
       pending.textContent = Number(pending.textContent) + 1;
       showToast("已加入待准备投递，等宝宝老婆看一眼。");
     });
+    resumeForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      localStorage.setItem(resumeStorageKey, JSON.stringify(getResumeData()));
+      renderResumeSummary();
+      showToast("简历信息已经保存到这台手机。");
+    });
+    resumeForm.addEventListener("input", renderResumeSummary);
+    clearResume.addEventListener("click", () => {
+      if (!confirm("确定清空这台手机上保存的简历信息吗？")) return;
+      localStorage.removeItem(resumeStorageKey);
+      resumeForm.reset();
+      renderResumeSummary();
+      showToast("已清空本机保存的简历信息。");
+    });
     document.querySelectorAll(".bottom-nav a").forEach((link) => {
       link.addEventListener("click", () => {
         document.querySelectorAll(".bottom-nav a").forEach((item) => item.classList.remove("active"));
@@ -1019,6 +1185,7 @@
 
     today();
     updateFortune();
+    loadResume();
     dailyMessage.textContent = messages[messageIndex];
     renderJobs();
   </script>
